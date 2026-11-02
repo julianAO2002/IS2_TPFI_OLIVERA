@@ -2,11 +2,20 @@
 
 import socket
 import threading
+import time
 from typing import Any
 from unittest.mock import MagicMock
 
+import pytest
+
 from tpfi.common.protocol import MessageReader, parse_json_body
-from tpfi.server.observer import Observer, SocketObserver, Subject, SubscriptionManager
+from tpfi.server.observer import (
+    MAX_PENDING_NOTIFICATIONS,
+    Observer,
+    SocketObserver,
+    Subject,
+    SubscriptionManager,
+)
 
 
 class RecordingObserver(Observer):
@@ -103,6 +112,63 @@ class TestSocketObserver:
             message = MessageReader(right).read()
         assert message is not None
         assert parse_json_body(message.body) == {"ACTION": "change"}
+
+    def test_un_cliente_trabado_no_frena_a_quien_notifica(self) -> None:
+        # El set no debe esperar a la red: si no, un suscripto colgado demora la respuesta.
+        release = threading.Event()
+        connection = MagicMock()
+        connection.sendall.side_effect = lambda _: release.wait(5)
+        observer = SocketObserver(connection, "cpu")
+        started = time.monotonic()
+        observer.update({"n": 1})
+        observer.update({"n": 2})
+        elapsed = time.monotonic() - started
+        release.set()
+        observer.close()
+        assert elapsed < 0.5
+
+    def test_los_avisos_salen_en_orden(self) -> None:
+        left, right = socket.socketpair()
+        with left, right:
+            observer = SocketObserver(left, "cpu")
+            for number in range(5):
+                observer.update({"n": number})
+            reader = MessageReader(right)
+            received = [reader.read() for _ in range(5)]
+        assert [parse_json_body(item.body)["n"] for item in received if item] == list(range(5))
+
+    def test_si_se_llena_la_cola_falla_como_un_socket_caido(self) -> None:
+        # Una cola sin límite permitiría que un cliente trabado agote la memoria.
+        release = threading.Event()
+        connection = MagicMock()
+        connection.sendall.side_effect = lambda _: release.wait(5)
+        observer = SocketObserver(connection, "cpu")
+        with pytest.raises(OSError, match="cola"):
+            for number in range(MAX_PENDING_NOTIFICATIONS + 5):
+                observer.update({"n": number})
+        release.set()
+        observer.close()
+
+    def test_el_gestor_quita_al_que_llena_su_cola(self) -> None:
+        release = threading.Event()
+        connection = MagicMock()
+        connection.sendall.side_effect = lambda _: release.wait(5)
+        manager = SubscriptionManager()
+        manager.attach(SocketObserver(connection, "cpu"))
+        for number in range(MAX_PENDING_NOTIFICATIONS + 5):
+            manager.notify({"n": number})
+        release.set()
+        assert manager.count() == 0
+
+    def test_si_falla_el_envio_se_corta_el_socket(self) -> None:
+        # Cortarlo despierta al hilo de la conexión, que quita la suscripción.
+        connection = MagicMock()
+        connection.sendall.side_effect = OSError("sin red")
+        SocketObserver(connection, "cpu").update({"n": 1})
+        deadline = time.monotonic() + 5
+        while not connection.shutdown.called and time.monotonic() < deadline:
+            time.sleep(0.01)
+        connection.shutdown.assert_called_once()
 
     def test_conoce_el_uuid_del_cliente(self) -> None:
         assert SocketObserver(MagicMock(), "cpu").client_uuid == "cpu"
