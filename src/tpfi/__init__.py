@@ -14,5 +14,8 @@ Los patrones pedidos por el enunciado están en:
 - Observer: `tpfi.server.observer`.
 """
 
-from tpfi.common.version import __build__ as __build__
-from tpfi.common.version import __version__ as __version__
+from tpfi import clients, common, persistence, server
+from tpfi.common.version import __build__, __version__
+
+# pdoc solo documenta lo que figura acá: si faltan los subpaquetes, omite sus módulos.
+__all__ = ["__build__", "__version__", "clients", "common", "persistence", "server"]
