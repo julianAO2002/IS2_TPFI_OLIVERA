@@ -35,3 +35,20 @@ class ProtocolError(TpfiError):
     """El mensaje recibido por el socket no respeta el formato acordado."""
 
     status = 400
+
+
+class IncompleteMessageError(ProtocolError, ConnectionError):
+    """La conexión se cortó a mitad de un mensaje.
+
+    También es `ConnectionError` porque, para quien está leyendo, es un corte de red.
+    """
+
+
+class ServerUnavailableError(TpfiError):
+    """El cliente no pudo comunicarse con el servidor de aplicaciones."""
+
+    status = 503
+
+
+class OutputError(TpfiError):
+    """No se pudo escribir el archivo de salida del cliente."""

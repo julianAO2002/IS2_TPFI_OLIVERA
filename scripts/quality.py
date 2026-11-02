@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PROGRAMS: list[str] = []
+PROGRAMS = ["singletonclient.py", "observerclient.py", "singletonproxyobserver.py"]
 
 # Cada control es un nombre y el modulo de Python que lo ejecuta con sus argumentos.
 CHECKS: list[tuple[str, list[str]]] = [

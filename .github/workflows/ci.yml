@@ -30,15 +30,15 @@ jobs:
       - name: black (formato consistente)
         run: .venv/bin/black --check .
       - name: pycodestyle (PEP8)
-        run: .venv/bin/pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts
+        run: .venv/bin/pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts *.py
       - name: pydocstyle (PEP257)
-        run: .venv/bin/pydocstyle --convention=pep257 src scripts
+        run: .venv/bin/pydocstyle --convention=pep257 src scripts *.py
       - name: mypy
         run: .venv/bin/mypy
       - name: pyright
         run: .venv/bin/pyright
       - name: bandit (seguridad)
-        run: .venv/bin/bandit -q -c pyproject.toml -r src scripts
+        run: .venv/bin/bandit -q -c pyproject.toml -r src scripts *.py
 
   pruebas:
     name: Pruebas (${{ matrix.os }})
