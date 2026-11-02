@@ -1,0 +1,25 @@
+# Dependencias del proyecto, con version exacta para que la instalacion sea reproducible.
+# Instalar dentro del ambiente virtual con:
+#   python -m pip install -r requirements.txt
+
+# --- Ejecucion ---
+boto3==1.43.123
+
+# --- Pruebas ---
+pytest==9.2.0
+pytest-cov==7.1.0
+hypothesis==6.170.14
+moto[dynamodb,server]==5.2.5
+
+# --- Calidad y formato ---
+ruff==0.17.3
+black==26.10.1
+pycodestyle==2.15.0
+pydocstyle==6.3.0
+mypy==2.4.1
+pyright==1.1.414
+boto3-stubs[dynamodb]==1.43.123
+bandit==1.9.4
+
+# --- Documentacion ---
+pdoc==16.0.0

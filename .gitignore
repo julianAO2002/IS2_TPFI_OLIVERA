@@ -52,3 +52,12 @@ site/
 # IDE files
 # .idea/
 # .vscode/
+
+# Proyecto TPFI: credenciales y salidas locales. Nunca se versionan.
+*credentials*.json
+*.pem
+output*.json
+.hypothesis/
+coverage.xml
+htmlcov/
+docs/api/

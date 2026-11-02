@@ -1,17 +1,13 @@
-## What
+## Que cambia
 
-<!-- 1-3 sentences. Link the issue if there is one. -->
+<!-- Una a tres oraciones. -->
 
-## AI Provenance
+## Uso de IA
 
-<!-- Remove this section for human-authored PRs. -->
+- **Herramienta:** <!-- Herramienta y modelo. Registrar los prompts en CONTEXT.md. -->
 
-- **Tool:** <!-- Claude Code, Cursor, Copilot, Codex, etc. -->
-- **Model:** <!-- Claude Opus 4.6, GPT-4o, etc. -->
-- **Prompt/thread:** <!-- Paste your prompt or a link to the thread. -->
+## Verificacion
 
-## Checklist
-
-- [ ] Addresses exactly one issue or feature
-- [ ] New or changed behavior has test coverage
-- [ ] Diff contains only changes for this task
+- [ ] `python scripts/quality.py` termina sin errores
+- [ ] La cobertura sigue en 85% o mas
+- [ ] CHANGELOG.md actualizado

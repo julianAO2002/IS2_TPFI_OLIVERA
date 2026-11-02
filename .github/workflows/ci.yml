@@ -1,119 +1,93 @@
+# Integracion continua: se ejecuta en cada PR y es reutilizada por el workflow de entrega.
+# Ningun job necesita credenciales de AWS: las pruebas usan moto, un DynamoDB simulado.
 name: CI
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+  workflow_call:
+  workflow_dispatch:
 
-permissions: {}
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+permissions:
+  contents: read
 
 jobs:
-  lint:
-    name: Lint
+  calidad:
+    name: Calidad estatica
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-
-      - name: Ruff format check
-        run: uv run ruff format --check .
-
-      - name: Ruff lint
-        run: uv run ruff check .
-
-  type-check:
-    name: Type check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          persist-credentials: false
+          python-version: "3.12"
+      - name: Ambiente virtual y dependencias
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt
+      - name: ruff (reglas de formato)
+        run: .venv/bin/ruff check .
+      - name: black (formato consistente)
+        run: .venv/bin/black --check .
+      - name: pycodestyle (PEP8)
+        run: .venv/bin/pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts
+      - name: pydocstyle (PEP257)
+        run: .venv/bin/pydocstyle --convention=pep257 src scripts
+      - name: mypy
+        run: .venv/bin/mypy
+      - name: pyright
+        run: .venv/bin/pyright
+      - name: bandit (seguridad)
+        run: .venv/bin/bandit -q -c pyproject.toml -r src scripts
 
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-
-      - name: Type check with ty
-        run: uv run ty check .
-
-  test:
-    name: Test (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+  pruebas:
+    name: Pruebas (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12", "3.13", "3.14"]
+        # El bloqueo del puerto se comporta distinto en Windows y Linux: se prueban ambos.
+        os: [ubuntu-latest, windows-latest]
+    env:
+      AWS_ACCESS_KEY_ID: testing
+      AWS_SECRET_ACCESS_KEY: testing
+      AWS_DEFAULT_REGION: us-east-1
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-
-      - name: Run tests with coverage
-        run: uv run --python=${{ matrix.python-version }} coverage run -m pytest
-
-      - name: Upload coverage data
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          name: coverage-${{ matrix.python-version }}
-          path: .coverage.*
-          include-hidden-files: true
+          python-version: "3.12"
+      - name: Dependencias
+        run: python -m pip install -r requirements.txt
+      - name: pytest con cobertura minima de 85%
+        run: python -m pytest --cov --cov-report=term-missing --cov-fail-under=85
 
-  coverage:
-    name: Coverage
-    needs: test
+  secretos:
+    name: TruffleHog
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Buscar secretos en el historial
+        uses: trufflesecurity/trufflehog@ea68ca03c865c5f324e86e849ced20ed3cf9dbbb # v3.99.8
+        with:
+          extra_args: --results=verified,unknown
+
+  documentacion:
+    name: Documentacion (pdoc)
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-
-      - name: Download coverage data
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          pattern: coverage-*
-          merge-multiple: true
-
-      - name: Combine coverage
-        run: uv run coverage combine
-
-      - name: Coverage report
-        run: |
-          echo '## Coverage Report' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          uv run coverage report | tee -a $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-
-  all-checks-pass:
-    name: All checks pass
-    if: always()
-    needs: [lint, type-check, test, coverage]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check job results
-        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
-        with:
-          jobs: ${{ toJSON(needs) }}
+          python-version: "3.12"
+      - name: Dependencias
+        run: python -m pip install -r requirements.txt
+      - name: Generar documentacion
+        run: python scripts/build_docs.py
