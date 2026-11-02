@@ -1,4 +1,4 @@
-"""Genera la documentacion HTML del paquete tpfi con pdoc en docs/api."""
+"""Genera la documentación HTML del paquete tpfi con pdoc en docs/api."""
 
 import os
 
@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
-    """Ejecuta pdoc sobre el paquete y devuelve su codigo de salida."""
+    """Ejecuta pdoc sobre el paquete y devuelve su código de salida."""
     command = [sys.executable, "-m", "pdoc", "tpfi", "--output-directory", str(ROOT / "docs" / "api")]
     # pdoc tiene que poder importar el paquete, que vive dentro de src/.
     environment = {**os.environ, "PYTHONPATH": str(ROOT / "src")}
