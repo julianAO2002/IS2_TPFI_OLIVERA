@@ -130,6 +130,22 @@ class TestMessageReader:
             with pytest.raises(ProtocolError, match="Content-Length"):
                 MessageReader(right).read()
 
+    def test_un_timeout_no_pierde_lo_que_ya_se_leyo(self) -> None:
+        # El cliente observador lee con plazo: un corte a mitad de mensaje debe poder retomarse.
+        left, right = _pair()
+        with left, right:
+            right.settimeout(0.05)
+            raw = encode_response(200, {"n": 1})
+            left.sendall(raw[:-3])
+            reader = MessageReader(right)
+            with pytest.raises(TimeoutError):
+                reader.read()
+            left.sendall(raw[-3:])
+            message = reader.read()
+        assert message is not None
+        assert message.status == 200
+        assert parse_json_body(message.body) == {"n": 1}
+
     def test_rechaza_cabecera_sin_fin(self) -> None:
         left, right = _pair()
         with left, right:

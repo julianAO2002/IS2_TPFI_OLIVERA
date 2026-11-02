@@ -1,4 +1,4 @@
-## Que cambia
+## Qué cambia
 
 <!-- Una a tres oraciones. -->
 
@@ -6,8 +6,8 @@
 
 - **Herramienta:** <!-- Herramienta y modelo. Registrar los prompts en CONTEXT.md. -->
 
-## Verificacion
+## Verificación
 
 - [ ] `python scripts/quality.py` termina sin errores
-- [ ] La cobertura sigue en 85% o mas
+- [ ] La cobertura sigue en 85% o más
 - [ ] CHANGELOG.md actualizado

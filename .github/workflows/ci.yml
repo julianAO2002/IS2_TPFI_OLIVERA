@@ -1,5 +1,5 @@
-# Integracion continua: se ejecuta en cada PR y es reutilizada por el workflow de entrega.
-# Ningun job necesita credenciales de AWS: las pruebas usan moto, un DynamoDB simulado.
+# Integración continua: se ejecuta en cada PR y es reutilizada por el workflow de entrega.
+# Ningún job necesita credenciales de AWS: las pruebas usan moto, un DynamoDB simulado.
 name: CI
 
 on:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   calidad:
-    name: Calidad estatica
+    name: Calidad estática
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -30,15 +30,15 @@ jobs:
       - name: black (formato consistente)
         run: .venv/bin/black --check .
       - name: pycodestyle (PEP8)
-        run: .venv/bin/pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts
+        run: .venv/bin/pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts *.py
       - name: pydocstyle (PEP257)
-        run: .venv/bin/pydocstyle --convention=pep257 src scripts
+        run: .venv/bin/pydocstyle --convention=pep257 src scripts *.py
       - name: mypy
         run: .venv/bin/mypy
       - name: pyright
         run: .venv/bin/pyright
       - name: bandit (seguridad)
-        run: .venv/bin/bandit -q -c pyproject.toml -r src scripts
+        run: .venv/bin/bandit -q -c pyproject.toml -r src scripts *.py
 
   pruebas:
     name: Pruebas (${{ matrix.os }})
@@ -61,7 +61,7 @@ jobs:
           python-version: "3.12"
       - name: Dependencias
         run: python -m pip install -r requirements.txt
-      - name: pytest con cobertura minima de 85%
+      - name: pytest con cobertura mínima de 85%
         run: python -m pytest --cov --cov-report=term-missing --cov-fail-under=85
 
   secretos:
@@ -78,7 +78,7 @@ jobs:
           extra_args: --results=verified,unknown
 
   documentacion:
-    name: Documentacion (pdoc)
+    name: Documentación (pdoc)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -89,5 +89,5 @@ jobs:
           python-version: "3.12"
       - name: Dependencias
         run: python -m pip install -r requirements.txt
-      - name: Generar documentacion
+      - name: Generar documentación
         run: python scripts/build_docs.py

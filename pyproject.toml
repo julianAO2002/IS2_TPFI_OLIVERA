@@ -47,7 +47,7 @@ convention = "pep257"
 # El nombre de cada prueba ya describe la regla que verifica.
 # Los scripts solo ejecutan herramientas del proyecto, con argumentos fijos.
 "scripts/*" = ["S603"]
-"tests/*" = ["S101", "S603", "S105", "S106", "D102", "D103"]
+"tests/*" = ["S101", "S603", "S105", "S106", "D102", "D103", "D107"]
 
 [tool.black]
 line-length = 120
@@ -57,11 +57,11 @@ extend-exclude = "(odd|docs)/"
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["src", "tests", "scripts"]
+files = ["src", "tests", "scripts", "singletonclient.py", "observerclient.py", "singletonproxyobserver.py"]
 mypy_path = "src"
 
 [tool.pyright]
-include = ["src", "tests", "scripts"]
+include = ["src", "tests", "scripts", "singletonclient.py", "observerclient.py", "singletonproxyobserver.py"]
 extraPaths = ["src"]
 pythonVersion = "3.12"
 typeCheckingMode = "standard"

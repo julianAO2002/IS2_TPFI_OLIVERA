@@ -1,8 +1,8 @@
-# Dependencias del proyecto, con version exacta para que la instalacion sea reproducible.
+# Dependencias del proyecto, con versión exacta para que la instalación sea reproducible.
 # Instalar dentro del ambiente virtual con:
 #   python -m pip install -r requirements.txt
 
-# --- Ejecucion ---
+# --- Ejecución ---
 boto3==1.43.123
 
 # --- Pruebas ---
@@ -21,5 +21,5 @@ pyright==1.1.414
 boto3-stubs[dynamodb]==1.43.123
 bandit==1.9.4
 
-# --- Documentacion ---
+# --- Documentación ---
 pdoc==16.0.0

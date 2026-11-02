@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Any
 
-from tpfi.common.errors import ProtocolError, ValidationError
+from tpfi.common.errors import IncompleteMessageError, ProtocolError, ValidationError
 
 #: Puerto por defecto de todos los programas.
 DEFAULT_PORT = 8080
@@ -31,6 +31,9 @@ MAX_HEADER_BYTES = 64 * 1024
 #: Tamaño máximo del cuerpo. Un ítem de DynamoDB no puede superar los 400 KB, pero
 #: una respuesta "list" contiene todos los ítems de la tabla.
 MAX_BODY_BYTES = 16 * 1024 * 1024
+
+#: Confirmación que recibe un cliente observador al suscribirse.
+SUBSCRIBED_ACK = {"STATUS": "subscribed"}
 
 ACTIONS: tuple[str, ...] = ("get", "set", "list", "subscribe")
 #: Acciones que acepta singletonclient; "subscribe" le corresponde a observerclient.
@@ -80,6 +83,12 @@ class Message:
 
     start_line: str
     body: bytes
+
+    @property
+    def status(self) -> int:
+        """Devuelve el código de estado de una respuesta, o 0 si la línea no lo trae."""
+        parts = self.start_line.split()
+        return int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else 0
 
 
 def _require_text(payload: dict[str, Any], key: str) -> str:
@@ -213,23 +222,28 @@ class MessageReader:
         return bool(chunk)
 
     def read(self) -> Message | None:
-        """Devuelve el próximo mensaje, o None si la conexión cerró entre mensajes."""
+        """Devuelve el próximo mensaje, o None si la conexión cerró entre mensajes.
+
+        Los bytes se quitan del buffer recién cuando el mensaje está completo. Así, si
+        `recv` lanza un timeout en el medio, se puede volver a llamar sin perder nada.
+        """
         while b"\r\n\r\n" not in self._buffer:
             if len(self._buffer) > MAX_HEADER_BYTES:
                 raise ProtocolError("Cabecera demasiado grande.")
             if not self._fill():
                 if self._buffer:
-                    raise ProtocolError("Mensaje incompleto: la conexión se cerró antes de tiempo.")
+                    raise IncompleteMessageError("Mensaje incompleto: la conexión se cerró antes de tiempo.")
                 return None
 
-        head, self._buffer = self._buffer.split(b"\r\n\r\n", 1)
+        head, _, rest = self._buffer.partition(b"\r\n\r\n")
         start_line, length = self._parse_head(head)
-        while len(self._buffer) < length:
+        while len(rest) < length:
             if not self._fill():
-                raise ProtocolError("Mensaje incompleto: la conexión se cerró antes de tiempo.")
+                raise IncompleteMessageError("Mensaje incompleto: la conexión se cerró antes de tiempo.")
+            _, _, rest = self._buffer.partition(b"\r\n\r\n")
 
-        body, self._buffer = self._buffer[:length], self._buffer[length:]
-        return Message(start_line=start_line, body=body)
+        self._buffer = rest[length:]
+        return Message(start_line=start_line, body=rest[:length])
 
     @staticmethod
     def _parse_head(head: bytes) -> tuple[str, int]:
