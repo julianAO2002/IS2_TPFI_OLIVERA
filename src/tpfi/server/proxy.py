@@ -46,9 +46,15 @@ class CorporateServiceProxy(CorporateService):
 
     def _audit(self, action: str, record_id: str | None = None) -> None:
         """Registra la acción en CorporateLog."""
-        logger.debug("Auditoría: cliente=%s sesión=%s acción=%s", self._client_uuid, self._session_id, action)
-        self._log.record(
+        key = self._log.record(
             AuditEntry(client_uuid=self._client_uuid, session_id=self._session_id, action=action, record_id=record_id)
+        )
+        logger.debug(
+            "Auditoría registrada: clave=%s cliente=%s sesión=%s acción=%s",
+            key,
+            self._client_uuid,
+            self._session_id,
+            action,
         )
 
     def get_record(self, record_id: str) -> dict[str, Any]:

@@ -9,11 +9,17 @@ usuario. Pueden correr contra dos destinos:
   otros alumnos: solo se escriben claves con el prefijo `OLIVERA-TEST-`, y al terminar
   solo se borran esas claves.
 
+La tabla CorporateLog es grande y su capacidad de lectura es limitada, así que las
+pruebas nunca la recorren con un scan: toman la clave de cada fila del log de debug del
+servidor y la leen con `get_item`. Un scan por prueba agotó la capacidad compartida en
+la primera corrida real.
+
 Con `TPFI_EVIDENCE_DIR=carpeta` se guarda ahí el log de debug del servidor.
 """
 
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -26,7 +32,6 @@ from typing import IO, TYPE_CHECKING, Any
 
 import boto3
 import pytest
-from boto3.dynamodb.conditions import Attr
 
 if TYPE_CHECKING:
     from mypy_boto3_dynamodb.service_resource import Table
@@ -34,6 +39,7 @@ if TYPE_CHECKING:
 ROOT = Path(__file__).resolve().parents[2]
 TEST_PREFIX = "OLIVERA-TEST-"
 START_TIMEOUT_SECONDS = 20.0
+AUDIT_LINE = re.compile(r"Auditoría registrada: clave=(\S+) cliente=(\S+)")
 
 
 def free_port() -> int:
@@ -76,19 +82,12 @@ class Backend:
         """Lee una fila de CorporateData directamente, sin pasar por el sistema."""
         return self.data.get_item(Key={"id": key}, ConsistentRead=True).get("Item")
 
-    def audit_rows(self, client_uuid: str) -> list[dict[str, Any]]:
-        """Devuelve las filas de CorporateLog de un cliente."""
-        rows: list[dict[str, Any]] = []
-        arguments: dict[str, Any] = {
-            "FilterExpression": Attr("CPUid").eq(client_uuid),
-            "ConsistentRead": True,
-        }
-        while True:
-            page = self.log.scan(**arguments)
-            rows.extend(page["Items"])
-            if "LastEvaluatedKey" not in page:
-                return rows
-            arguments["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+    def audit_row(self, key: str) -> dict[str, Any]:
+        """Lee una fila de CorporateLog directamente de la tabla."""
+        item = self.log.get_item(Key={"id": key}, ConsistentRead=True).get("Item")
+        if item is None:
+            raise AssertionError(f"El servidor informó la auditoría {key}, pero no está en la tabla.")
+        return item
 
 
 @pytest.fixture(scope="session")
@@ -158,6 +157,7 @@ class Programs:
 
     backend: Backend
     tmp_path: Path
+    test_name: str
     processes: list[subprocess.Popen[bytes]] = field(default_factory=list)
     log_files: list[IO[bytes]] = field(default_factory=list)
 
@@ -205,7 +205,16 @@ class Programs:
         evidence = os.environ.get("TPFI_EVIDENCE_DIR")
         folder = Path(evidence) if evidence else self.tmp_path
         folder.mkdir(parents=True, exist_ok=True)
-        return folder / name
+        return folder / f"{self.test_name}-{name}"
+
+    def audit_rows(self, client_uuid: str) -> list[dict[str, Any]]:
+        """Devuelve las filas de CorporateLog de un cliente en esta prueba."""
+        rows: list[dict[str, Any]] = []
+        for path in self.log_path("x").parent.glob(f"{self.test_name}-*.log"):
+            for key, client in AUDIT_LINE.findall(path.read_text(encoding="utf-8", errors="replace")):
+                if client == client_uuid:
+                    rows.append(self.backend.audit_row(key))
+        return rows
 
     def log_text(self, name: str) -> str:
         """Lee la salida acumulada de un proceso."""
@@ -224,9 +233,10 @@ class Programs:
 
 
 @pytest.fixture
-def programs(backend: Backend, tmp_path: Path) -> Iterator[Programs]:
+def programs(backend: Backend, tmp_path: Path, request: pytest.FixtureRequest) -> Iterator[Programs]:
     """Entrega el ejecutor de programas y limpia los procesos al terminar."""
-    instance = Programs(backend, tmp_path)
+    test_name = re.sub(r"\W+", "_", request.node.name).strip("_")
+    instance = Programs(backend, tmp_path, test_name)
     yield instance
     instance.stop_all()
 

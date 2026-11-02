@@ -43,8 +43,8 @@ def _wait_for(condition: Callable[[], bool], seconds: float = 25.0) -> None:
     assert condition()
 
 
-def _actions(backend: Backend, client_uuid: str) -> list[str]:
-    return sorted(str(row["action"]) for row in backend.audit_rows(client_uuid))
+def _actions(programs: Programs, client_uuid: str) -> list[str]:
+    return sorted(str(row["action"]) for row in programs.audit_rows(client_uuid))
 
 
 class TestCaminoFeliz:
@@ -63,7 +63,7 @@ class TestCaminoFeliz:
         assert result.json["sede"] == "FCyT"
         assert result.json["cp"] == ""
         assert backend.row(key) == result.json
-        rows = backend.audit_rows(client_uuid)
+        rows = programs.audit_rows(client_uuid)
         assert [(row["action"], row["requestedId"]) for row in rows] == [("set", key)]
         assert rows[0]["sessionid"]
         assert rows[0]["timestamp"]
@@ -93,7 +93,7 @@ class TestCaminoFeliz:
 
         assert result.code == 0
         assert result.json == {"id": key, **FULL_TUPLE}
-        assert _actions(backend, client_uuid) == ["get"]
+        assert _actions(programs, client_uuid) == ["get"]
 
     def test_get_escribe_en_el_archivo_de_salida(
         self, programs: Programs, backend: Backend, client_uuid: str, tmp_path: Path
@@ -124,7 +124,7 @@ class TestCaminoFeliz:
         assert result.code == 0
         assert isinstance(result.json, list)
         assert set(keys) <= {record["id"] for record in result.json}
-        assert _actions(backend, client_uuid) == ["list"]
+        assert _actions(programs, client_uuid) == ["list"]
 
     def test_subscribe_recibe_cada_cambio_y_audita(
         self, programs: Programs, backend: Backend, client_uuid: str, tmp_path: Path
@@ -160,7 +160,7 @@ class TestCaminoFeliz:
             message = MessageReader(connection).read()
             assert message is not None
             assert parse_json_body(message.body) == {"STATUS": "subscribed"}
-        assert _actions(backend, client_uuid) == ["subscribe"]
+        assert _actions(programs, client_uuid) == ["subscribe"]
 
 
 class TestArgumentosMalformados:
@@ -240,7 +240,7 @@ class TestDatosMinimos:
         assert message.status == 400
         assert dato in parse_json_body(message.body)["Error"]
         assert backend.row(key) is None
-        assert backend.audit_rows(client_uuid) == []
+        assert programs.audit_rows(client_uuid) == []
 
     def test_registro_inexistente_devuelve_error_y_queda_auditado(
         self, programs: Programs, backend: Backend, client_uuid: str
@@ -253,7 +253,7 @@ class TestDatosMinimos:
 
         assert result.code == 1
         assert "No existe" in result.json["Error"]
-        assert _actions(backend, client_uuid) == ["get"]
+        assert _actions(programs, client_uuid) == ["get"]
 
 
 class TestServidorCaido:
