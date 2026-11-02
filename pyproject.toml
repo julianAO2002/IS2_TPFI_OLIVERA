@@ -45,6 +45,8 @@ convention = "pep257"
 [tool.ruff.lint.per-file-ignores]
 # En las pruebas el uso de assert y de procesos auxiliares es lo esperado.
 # El nombre de cada prueba ya describe la regla que verifica.
+# Los scripts solo ejecutan herramientas del proyecto, con argumentos fijos.
+"scripts/*" = ["S603"]
 "tests/*" = ["S101", "S603", "S105", "S106", "D102", "D103"]
 
 [tool.black]

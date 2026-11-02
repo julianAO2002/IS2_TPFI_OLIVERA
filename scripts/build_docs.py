@@ -1,6 +1,7 @@
 """Genera la documentacion HTML del paquete tpfi con pdoc en docs/api."""
 
 import os
+
 # Se ejecuta solo pdoc, con argumentos fijos.
 import subprocess  # nosec B404
 import sys
