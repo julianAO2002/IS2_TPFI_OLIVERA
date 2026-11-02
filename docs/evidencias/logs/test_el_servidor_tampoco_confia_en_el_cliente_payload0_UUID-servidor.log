@@ -1,0 +1,4 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:59542
+2026-11-02 20:40:50,780 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59545, 0, 0)
+2026-11-02 20:40:50,781 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59546, 0, 0)
+2026-11-02 20:40:50,781 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: Falta el dato obligatorio UUID o no es un texto válido.

@@ -1,0 +1,39 @@
+Suscripto a localhost:59514.
+{
+  "UUID": "39908810720395-f09dcbd2",
+  "ID": "OLIVERA-TEST-4e85eba5f050",
+  "ACTION": "change",
+  "DATA": {
+    "idreq": "",
+    "telefono": "",
+    "idSeq": "",
+    "sede": "uno",
+    "seqID": "",
+    "domicilio": "",
+    "web": "",
+    "provincia": "",
+    "cp": "",
+    "id": "OLIVERA-TEST-4e85eba5f050",
+    "localidad": "",
+    "CUIT": ""
+  }
+}
+{
+  "UUID": "39908810720395-f09dcbd2",
+  "ID": "OLIVERA-TEST-4e85eba5f050",
+  "ACTION": "change",
+  "DATA": {
+    "id": "OLIVERA-TEST-4e85eba5f050",
+    "seqID": "",
+    "domicilio": "",
+    "cp": "",
+    "telefono": "",
+    "CUIT": "",
+    "idSeq": "",
+    "web": "",
+    "idreq": "",
+    "sede": "dos",
+    "localidad": "",
+    "provincia": ""
+  }
+}

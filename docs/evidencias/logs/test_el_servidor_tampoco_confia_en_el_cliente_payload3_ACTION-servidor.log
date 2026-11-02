@@ -1,0 +1,4 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:59564
+2026-11-02 20:40:58,983 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59567, 0, 0)
+2026-11-02 20:40:58,984 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59568, 0, 0)
+2026-11-02 20:40:58,985 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: ACTION debe ser uno de: get, set, list, subscribe.

@@ -1,0 +1,3 @@
+PS IS2_TPFI> python singletonproxyobserver.py
+Error: el puerto 8080 ya está en uso o no está disponible.
+(codigo de salida: 1)

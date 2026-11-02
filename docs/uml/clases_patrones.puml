@@ -1,0 +1,67 @@
+@startuml clases_patrones
+!pragma layout smetana
+title Clases: patrones Singleton, Proxy y Observer
+skinparam shadowing false
+skinparam defaultFontName Arial
+hide empty members
+
+package "Singleton" {
+  class SingletonMeta <<metaclass>> {
+    -_instances: dict
+    -_lock: Lock
+    +__call__(): instancia única
+  }
+  class CorporateDataTable {
+    +get(id)
+    +list_all()
+    +upsert(id, campos)
+    +check_available()
+  }
+  class CorporateLogTable {
+    +record(entrada)
+    +check_available()
+  }
+  SingletonMeta <.. CorporateDataTable : metaclass
+  SingletonMeta <.. CorporateLogTable : metaclass
+}
+
+package "Proxy" {
+  abstract class CorporateService {
+    +get_record(id)
+    +set_record(id, campos)
+    +list_records()
+  }
+  class RealCorporateService
+  class CorporateServiceProxy {
+    -_audit(acción, id)
+    +subscribe(observador)
+  }
+  CorporateService <|-- RealCorporateService
+  CorporateService <|-- CorporateServiceProxy
+  CorporateServiceProxy o--> CorporateService : delega en
+}
+
+package "Observer" {
+  abstract class Subject {
+    +attach(observador)
+    +detach(observador)
+    +notify(aviso)
+  }
+  abstract class Observer {
+    +update(aviso)
+    +close()
+  }
+  class SubscriptionManager
+  class SocketObserver
+  Subject <|-- SubscriptionManager
+  Observer <|-- SocketObserver
+  SubscriptionManager o--> "*" Observer : avisa a
+}
+
+class SingletonProxyObserverServer
+SingletonProxyObserverServer ..> CorporateServiceProxy : crea uno por conexión
+SingletonProxyObserverServer --> SubscriptionManager
+RealCorporateService --> CorporateDataTable
+CorporateServiceProxy --> CorporateLogTable
+CorporateServiceProxy --> Subject
+@enduml

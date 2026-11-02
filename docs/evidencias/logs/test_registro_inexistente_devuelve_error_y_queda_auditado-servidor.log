@@ -1,0 +1,6 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:59572
+2026-11-02 20:41:01,888 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59575, 0, 0)
+2026-11-02 20:41:01,888 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 59576, 0, 0)
+2026-11-02 20:41:01,888 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido: acción=get id=OLIVERA-TEST-2889471caa3f sesión=e7e32f85-4b2c-4bfc-94c8-3e02eddaf5a4
+2026-11-02 20:41:02,093 DEBUG Thread-2 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=43c7de5a-e576-4622-a86f-72704ad4d472 cliente=39908810720395-e0315626 sesión=e7e32f85-4b2c-4bfc-94c8-3e02eddaf5a4 acción=get
+2026-11-02 20:41:02,272 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: No existe el registro OLIVERA-TEST-2889471caa3f.

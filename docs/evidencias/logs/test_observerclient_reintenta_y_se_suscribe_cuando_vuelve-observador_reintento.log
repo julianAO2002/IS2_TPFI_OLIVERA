@@ -1,0 +1,21 @@
+Sin conexión con localhost:59583; próximo intento en 1 s.
+Suscripto a localhost:59583.
+{
+  "UUID": "39908810720395-19d8bfbc",
+  "ID": "OLIVERA-TEST-010a833fcbb1",
+  "ACTION": "change",
+  "DATA": {
+    "id": "OLIVERA-TEST-010a833fcbb1",
+    "telefono": "",
+    "CUIT": "",
+    "seqID": "",
+    "domicilio": "",
+    "sede": "x",
+    "cp": "",
+    "provincia": "",
+    "localidad": "",
+    "web": "",
+    "idSeq": "",
+    "idreq": ""
+  }
+}

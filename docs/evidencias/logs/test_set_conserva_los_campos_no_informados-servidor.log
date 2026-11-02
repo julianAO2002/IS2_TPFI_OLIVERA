@@ -1,0 +1,8 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:59482
+2026-11-02 20:40:25,760 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59485, 0, 0)
+2026-11-02 20:40:25,761 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 59486, 0, 0)
+2026-11-02 20:40:25,761 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TEST-733ff3fd3736 sesión=103c6849-bc87-42d3-934c-5423d6751fd8
+2026-11-02 20:40:25,969 DEBUG Thread-2 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=5c370616-86e3-464c-8235-b4402f27bf50 cliente=39908810720395-2604d1f2 sesión=103c6849-bc87-42d3-934c-5423d6751fd8 acción=set
+2026-11-02 20:40:26,669 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 59489, 0, 0)
+2026-11-02 20:40:26,681 DEBUG Thread-3 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TEST-733ff3fd3736 sesión=ee0f5108-7e7a-4538-9bd5-731214f00a76
+2026-11-02 20:40:26,849 DEBUG Thread-3 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=ab3fe45d-bee9-406c-8025-0e794a7c4521 cliente=39908810720395-2604d1f2 sesión=ee0f5108-7e7a-4538-9bd5-731214f00a76 acción=set

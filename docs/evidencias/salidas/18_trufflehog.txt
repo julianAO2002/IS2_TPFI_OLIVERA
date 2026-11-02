@@ -1,0 +1,6 @@
+PS IS2_TPFI> C:\Users\Jose\AppData\Local\Temp\claude\C--Users-Jose-Desktop-j-FACU-is2\747a3d67-265f-46fa-a605-efeeafe7d62f\scratchpad\tools\trufflehog.exe git file://C:/Users/Jose/Desktop/j/FACU/is2/IS2_TPFI_OLIVERA --results=verified,unknown --no-update
+🐷🔑🐷  TruffleHog. Unearth your secrets. 🐷🔑🐷
+
+2026-11-02T20:41:30-03:00	info-0	trufflehog	running source	{"source_name": "trufflehog - git", "source_type": "SOURCE_TYPE_GIT", "source_id": 1, "job_id": 1, "source_manager_worker_id": "5orlJ", "with_units": true}
+2026-11-02T20:41:31-03:00	info-0	trufflehog	finished scanning	{"chunks": 164, "bytes": 216740, "verified_secrets": 0, "unverified_secrets": 0, "scan_duration": "544.0802ms", "trufflehog_version": "3.99.8", "verification_caching": {"Hits":0,"Misses":0,"HitsWasted":0,"AttemptsSaved":0,"VerificationTimeSpentMS":0}}
+(codigo de salida: 0)

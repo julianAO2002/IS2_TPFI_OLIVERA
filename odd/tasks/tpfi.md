@@ -36,15 +36,15 @@ Supuestos (marcados como tales, no son requisitos del enunciado):
 
 | ID | Specs | Ruta | Estado | Commit / evidencia |
 |----|-------|------|--------|--------------------|
-| T1 | S13, S14, S15 | inline | pendiente | - |
-| T2 | S8, S9 | inline | pendiente | - |
-| T3 | S4-S7, S8 | inline | pendiente | - |
-| T4 | S1-S3 | inline | pendiente | - |
-| T5 | S10, S12, S14 | inline | pendiente | - |
-| T6 | S11 | inline | pendiente | - |
-| T7 | S10, S16 | inline | pendiente | - |
-| T8 | S15, S16 | inline | pendiente | - |
-| T9 | S16 | inline | pendiente | - |
+| T1 | S13, S14, S15 | inline | completa | 7e4feb5, 7d6f84b; PR 1 |
+| T2 | S8, S9 | inline | completa | 40b751e; RED/GREEN; PR 1 |
+| T3 | S4-S7, S8 | inline | completa | ba40c72; RED/GREEN; revisión con corrección 8956a17; PR 6 |
+| T4 | S1-S3 | inline | completa | ba40c72; PR 6 |
+| T5 | S10, S12, S14 | inline | completa | ffccc45; 32 de 32 contra moto y AWS; PR 6 |
+| T6 | S11 | inline | completa | docs/uml; PR de entrega |
+| T7 | S10, S16 | inline | completa | docs/evidencias; PR de entrega |
+| T8 | S15, S16 | inline | completa | PR 1, 6 y 7 integrados; CD y Pages en verde |
+| T9 | S16 | inline | completa | docs/memoria y carpeta IS2_TPFI_entrega |
 
 Detalle: T1 herramientas y CI; T2 persistencia Singleton; T3 Proxy y Observer; T4 programas y red; T5 aceptacion y cobertura; T6 UML; T7 corridas reales en AWS y evidencias; T8 repo remoto, PRs y documentacion publicada; T9 memoria, entrega y resumen.
 
@@ -56,3 +56,7 @@ Ruta: inline porque ningun disparador de escritor aplica (las unidades dependen 
 - L2 (2026-11-02): "ahit e agrge el otro pdf y por ahi tengo las cotnraseñas" / "ahora si estan las cred4enciales". Se usa esa credencial para las tablas del TP. Coincide con el perfil `~/.aws`; el JSON queda fuera del repo.
 - L3 (2026-11-02): cookiecutter-pypackage 74e369c generado con `COOKIECUTTER_PYPACKAGE_GITHUB=skip` porque el hook interactivo falla sin TTY. Commit 0716354.
 - L4 (2026-11-02): RDD activo. Pronostico: mas de 400 lineas, se usa `stacked-to-main`.
+- L5 (2026-11-02): primera corrida real 24 de 32; el harness agotó la capacidad de CorporateLog con Scan. Corregido con GetItem por clave.
+- L6 (2026-11-02): revisión nativa: tramo servidor con una corrección crítica (cola por suscriptor), tramo persistencia aprobado, arreglo de documentación aprobado. Observaciones consultivas en la sección 10 de la memoria.
+- L7 (2026-11-02): la revisión de las capturas encontró la página proxy en 404: `__all__` limitaba a pdoc. PR 7 y commit c90219f.
+- L8 (2026-11-02): resultado final sobre build 4: 197 pruebas, 96.80% de cobertura, 32 de 32 en AWS, 0 secretos.

@@ -1,0 +1,22 @@
+PS IS2_TPFI> python singletonproxyobserver.py -v
+Servidor TPFI 1.0.0 (build 2) escuchando en *:8080
+2026-11-02 20:04:23,943 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 57321, 0, 0)
+2026-11-02 20:04:23,944 DEBUG Thread-1 (_handle_connection) tpfi.server.app: Pedido: acción=subscribe id=None sesión=686bc6c9-f77d-45d5-85df-e1f7d8eb5069
+2026-11-02 20:04:24,154 DEBUG Thread-1 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=da8bad90-7e13-4e3c-8103-2b3c1e9146d1 cliente=39908810720395 sesión=686bc6c9-f77d-45d5-85df-e1f7d8eb5069 acción=subscribe
+2026-11-02 20:04:24,154 DEBUG Thread-1 (_handle_connection) tpfi.server.observer: Suscripción registrada; total: 1
+2026-11-02 20:04:28,964 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 59285, 0, 0)
+2026-11-02 20:04:28,964 DEBUG Thread-3 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TPFI-DEMO sesión=27bc8a9c-54bc-4a3d-87e2-66752480babf
+2026-11-02 20:04:29,136 DEBUG Thread-3 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=ff07285b-56d4-4c1b-aaa4-89b421b63ca7 cliente=39908810720395 sesión=27bc8a9c-54bc-4a3d-87e2-66752480babf acción=set
+2026-11-02 20:04:32,064 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 59286, 0, 0)
+2026-11-02 20:04:32,086 DEBUG Thread-4 (_handle_connection) tpfi.server.app: Pedido: acción=get id=UADER-FCyT-IS2 sesión=7b9fd484-7afc-4afd-bbbb-8551b7a3586b
+2026-11-02 20:04:32,258 DEBUG Thread-4 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=4785b59c-5ac0-498f-81c5-991f171b1367 cliente=39908810720395 sesión=7b9fd484-7afc-4afd-bbbb-8551b7a3586b acción=get
+2026-11-02 20:04:35,040 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58867, 0, 0)
+2026-11-02 20:04:35,040 DEBUG Thread-5 (_handle_connection) tpfi.server.app: Pedido: acción=list id=None sesión=6cf422e4-f6c2-4ebe-8acb-08b616e75bed
+2026-11-02 20:04:35,212 DEBUG Thread-5 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=65505a8b-6460-41bd-b9b5-f70d94c01744 cliente=39908810720395 sesión=6cf422e4-f6c2-4ebe-8acb-08b616e75bed acción=list
+2026-11-02 20:04:38,484 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 49840, 0, 0)
+2026-11-02 20:04:38,506 DEBUG Thread-6 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TPFI-DEMO sesión=e6bab33a-c378-4f51-8922-f7852de02815
+2026-11-02 20:04:38,677 DEBUG Thread-6 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=a782dfaa-dc71-41e7-a79c-73f9d42e62ca cliente=39908810720395 sesión=e6bab33a-c378-4f51-8922-f7852de02815 acción=set
+2026-11-02 20:04:45,339 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 55789, 0, 0)
+2026-11-02 20:04:45,340 DEBUG Thread-7 (_handle_connection) tpfi.server.app: Pedido: acción=get id=OLIVERA-NO-EXISTE sesión=52be7589-f3c6-4413-9f86-cb78536c720c
+2026-11-02 20:04:45,512 DEBUG Thread-7 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=0af8c530-72b1-4a4a-9054-98d2d61167b1 cliente=39908810720395 sesión=52be7589-f3c6-4413-9f86-cb78536c720c acción=get
+2026-11-02 20:04:45,677 DEBUG Thread-7 (_handle_connection) tpfi.server.app: Pedido rechazado: No existe el registro OLIVERA-NO-EXISTE.
