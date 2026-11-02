@@ -1,42 +1,20 @@
-# tpfi
+# IS2 TPFI: servicios corporativos con Singleton, Proxy y Observer
 
-[![PyPI version](https://img.shields.io/pypi/v/tpfi.svg)](https://pypi.org/project/tpfi/)
-[![PyPI downloads](https://static.pepy.tech/badge/tpfi/month)](https://pepy.tech/projects/tpfi)
+Trabajo Práctico Final Integrador de Ingeniería de Software II (UADER-FCyT).
+Julián Olivera. El proyecto está en construcción; este archivo se mantiene actualizado.
 
-Trabajo Practico Final Integrador de Ingenieria de Software II
-
-* [GitHub](https://github.com/julianAO2002/tpfi/) | [PyPI](https://pypi.org/project/tpfi/) | [Documentation](https://julianAO2002.github.io/tpfi/)
-* Created by [Julian Olivera](https://audrey.feldroy.com/) | GitHub [@julianAO2002](https://github.com/julianAO2002) | PyPI [@julianAO2002](https://pypi.org/user/julianAO2002/)
-* MIT License
-
-## Features
-
-* TODO
-
-## Installation
+## Preparar el ambiente
 
 ```bash
-uv add tpfi
+python -m venv .venv
+.venv\Scripts\activate          # En Linux: source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-## Usage
+## Verificar la calidad
 
-```python
-import tpfi
+```bash
+python scripts/quality.py
 ```
 
-## Documentation
-
-Full documentation is available on
-[GitHub Pages](https://julianAO2002.github.io/tpfi/).
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and
-documentation instructions.
-
-## Author
-
-tpfi was created in 2026 by Julian Olivera.
-
-Built with [Cookiecutter](https://github.com/cookiecutter/cookiecutter) and the [audreyfeldroy/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage) project template.
+Licencia: MIT.

@@ -5,12 +5,9 @@ build-backend = "hatchling.build"
 [project]
 name = "tpfi"
 version = "1.0.0"
-description = "Trabajo Practico Final Integrador de Ingenieria de Software II"
+description = "TPFI de Ingenieria de Software II: patrones Singleton, Proxy y Observer sobre AWS DynamoDB."
 readme = "README.md"
 authors = [
-  {name = "Julian Olivera", email = "julianolivera200277@gmail.com"}
-]
-maintainers = [
   {name = "Julian Olivera", email = "julianolivera200277@gmail.com"}
 ]
 classifiers = [
@@ -19,92 +16,77 @@ classifiers = [
     "Typing :: Typed",
 ]
 license = {text = "MIT"}
-dependencies = [
-  "typer",
-  "rich",
-]
+dependencies = ["boto3"]
 requires-python = ">= 3.12"
-
-[dependency-groups]
-dev = [
-    { include-group = "lint" },
-    { include-group = "test" },
-    { include-group = "typecheck" },
-]
-lint = [
-    "ruff",
-]
-test = [
-    "coverage",
-    "pytest",
-]
-typecheck = [
-    "ty",
-]
-docs = [
-    "zensical",
-    "mkdocstrings-python",
-]
-
-[project.urls]
-bugs = "https://github.com/julianAO2002/tpfi/issues"
-changelog = "https://github.com/julianAO2002/tpfi/releases"
-documentation = "https://julianAO2002.github.io/tpfi/"
-homepage = "https://github.com/julianAO2002/tpfi"
-
-[project.scripts]
-tpfi = "tpfi.cli:app"
-
-[tool.ty]
-# All rules are enabled as "error" by default; no need to specify unless overriding.
-# Example override: relax a rule for the entire project (uncomment if needed).
-# rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
-
-[tool.ruff]
-line-length = 120
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # Pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "UP",  # pyupgrade
-]
-
-[tool.ruff.lint.flake8-bugbear]
-extend-immutable-calls = [
-    "typer.Argument",
-    "typer.Option",
-]
-
-[tool.coverage.run]
-branch = true
-parallel = true
-source = ["src/", "tests/"]
-
-[tool.coverage.report]
-show_missing = true
-skip_covered = true
-fail_under = 50
-exclude_also = [
-    "if TYPE_CHECKING:",
-    "if typing.TYPE_CHECKING:",
-    "@overload",
-    "@typing.overload",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-    "raise NotImplementedError",
-    "\\.\\.\\.",
-]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tpfi"]
 
-[tool.uv]
-package = true
-default-groups = ["dev"]
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["odd", "docs"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors (PEP8)
+    "W",   # pycodestyle warnings (PEP8)
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "D",   # pydocstyle (PEP257)
+    "S",   # flake8-bandit
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# En las pruebas el uso de assert y de procesos auxiliares es lo esperado.
+# El nombre de cada prueba ya describe la regla que verifica.
+"tests/*" = ["S101", "S603", "S105", "S106", "D102", "D103"]
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+extend-exclude = "(odd|docs)/"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src", "tests", "scripts"]
+mypy_path = "src"
+
+[tool.pyright]
+include = ["src", "tests", "scripts"]
+extraPaths = ["src"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
+venvPath = "."
+venv = ".venv"
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests", "odd", "docs"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/tpfi"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 85
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-ra"
+markers = [
+    "acceptance: prueba de aceptacion que levanta los programas reales como procesos.",
+    "aws: prueba que escribe en las tablas reales de AWS (requiere TPFI_ACCEPTANCE_AWS=1).",
+]
