@@ -8,7 +8,8 @@ PR integrado.
 
 ### Agregado
 
-- Build 3: diagramas UML, evidencias de ejecución, memoria final y README completo.
+- Build 4: diagramas UML, evidencias de ejecución, memoria final y README completo.
+- Build 3: la documentación publicada incluye todos los módulos, y el build falla si falta alguno.
 - Build 2: servidor SingletonProxyObserverTPFI, patrones Proxy y Observer, programas
   SingletonClient y ObserverClient, y pruebas de aceptación contra moto y AWS real.
 - Build 1: esqueleto generado con cookiecutter-pypackage, herramientas de calidad, workflows de CI

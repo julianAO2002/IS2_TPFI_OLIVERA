@@ -14,6 +14,5 @@ Los patrones pedidos por el enunciado están en:
 - Observer: `tpfi.server.observer`.
 """
 
-from tpfi.common.version import __build__, __version__
-
-__all__ = ["__build__", "__version__"]
+from tpfi.common.version import __build__ as __build__
+from tpfi.common.version import __version__ as __version__
