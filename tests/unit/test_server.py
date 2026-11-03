@@ -59,6 +59,13 @@ def _audit_actions() -> list[str]:
     return sorted(str(row["action"]) for row in table.scan()["Items"])
 
 
+def _wait_for_threads(limit: int) -> None:
+    deadline = time.monotonic() + 5
+    while threading.active_count() > limit and time.monotonic() < deadline:
+        time.sleep(0.02)
+    assert threading.active_count() <= limit
+
+
 def _subscribe(port: int) -> tuple[socket.socket, MessageReader]:
     connection = socket.create_connection(("localhost", port), timeout=5)
     connection.sendall(encode_request({"UUID": "obs", "ACTION": "subscribe"}, host="localhost"))
@@ -178,6 +185,22 @@ class TestSuscripciones:
         while server.subscriptions.count() and time.monotonic() < deadline:
             time.sleep(0.02)
         assert server.subscriptions.count() == 0
+
+    def test_desconectar_suscriptores_no_deja_hilos_vivos(self, server: SingletonProxyObserverServer) -> None:
+        # Cada suscriptor tiene un hilo de envío: tiene que terminar junto con la conexión.
+        before = threading.active_count()
+        for _ in range(10):
+            connection, _reader = _subscribe(server.port)
+            connection.close()
+        _wait_for_threads(before)
+
+    def test_una_suscripcion_rechazada_no_deja_hilos_vivos(self, server: SingletonProxyObserverServer) -> None:
+        before = threading.active_count()
+        with patch.object(CorporateLogTable, "record", side_effect=StorageError("sin log")):
+            for _ in range(10):
+                raw = encode_request({"UUID": "c", "ACTION": "subscribe"}, host="h")
+                assert _exchange(server.port, raw)[0] == 502
+        _wait_for_threads(before)
 
     def test_subscribe_con_falla_de_auditoria_no_registra(self, server: SingletonProxyObserverServer) -> None:
         with patch.object(CorporateLogTable, "record", side_effect=StorageError("sin log")):
