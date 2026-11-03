@@ -1,0 +1,21 @@
+PS IS2_TPFI> aws dynamodb get-item --table-name CorporateData --key file://docs/evidencias/demo/clave_data.json --consistent-read --query Item.{id:id.S,telefono:telefono.S,sede:sede.S,cp:cp.S} --output table
+--------------------------------------------------------
+|                        GetItem                       |
++------+---------------------+-------+-----------------+
+|  cp  |         id          | sede  |    telefono     |
++------+---------------------+-------+-----------------+
+|  3260|  OLIVERA-TPFI-DEMO  |  FCyT |  03442 00-0000  |
++------+---------------------+-------+-----------------+
+(codigo de salida: 0)
+PS IS2_TPFI> aws dynamodb get-item --table-name CorporateLog --key file://docs/evidencias/demo/clave_log.json --consistent-read --query Item.{id:id.S,CPUid:CPUid.S,sesion:sessionid.S,accion:action.S,idSolicitado:requestedId.S,fecha:timestamp.S} --output table
+----------------------------------------------------------
+|                         GetItem                        |
++---------------+----------------------------------------+
+|  CPUid        |  39908810720395                        |
+|  accion       |  set                                   |
+|  fecha        |  2026-11-02 21:14:56                   |
+|  id           |  84dc6d6a-9894-4740-ae54-952dc0c1ac83  |
+|  idSolicitado |  OLIVERA-TPFI-DEMO                     |
+|  sesion       |  62d62355-3018-4245-bd8d-eb3b3cf44b9b  |
++---------------+----------------------------------------+
+(codigo de salida: 0)

@@ -1,0 +1,7 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:58967
+2026-11-02 21:18:09,235 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58968, 0, 0)
+2026-11-02 21:18:09,235 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58970, 0, 0)
+2026-11-02 21:18:09,236 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58971, 0, 0)
+2026-11-02 21:18:09,236 DEBUG Thread-3 (_handle_connection) tpfi.server.app: Pedido: acción=subscribe id=None sesión=3ca3675e-6dc8-4a81-b705-16cc27d9de7f
+2026-11-02 21:18:09,448 DEBUG Thread-3 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=85176f80-8a6f-4df6-80b2-fda35c91685a cliente=39908810720395 sesión=3ca3675e-6dc8-4a81-b705-16cc27d9de7f acción=subscribe
+2026-11-02 21:18:09,448 DEBUG Thread-3 (_handle_connection) tpfi.server.observer: Suscripción registrada; total: 1

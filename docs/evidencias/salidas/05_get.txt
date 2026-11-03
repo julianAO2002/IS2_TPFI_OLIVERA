@@ -1,0 +1,26 @@
+PS IS2_TPFI> type docs\evidencias\demo\get.json
+{
+  "UUID": "39908810720395",
+  "ID": "UADER-FCyT-IS2",
+  "ACTION": "get"
+}
+(codigo de salida: 0)
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\get.json -o=docs\evidencias\demo\output_get.json
+(codigo de salida: 0)
+PS IS2_TPFI> type docs\evidencias\demo\output_get.json
+{
+  "cp": "3260",
+  "id": "UADER-FCyT-IS2",
+  "idreq": "473",
+  "sede": "FCyT",
+  "telefono": "03442 43-1442",
+  "seqID": "23",
+  "web": "http://www.uader.edu.ar",
+  "CUIT": "30-70925411-8",
+  "localidad": "Concepción del Uruguay",
+  "provincia": "Entre Rios",
+  "idSeq": "1146",
+  "domicilio": "25 de Mayo 385-1P",
+  "ID": "UADER-FCyT-IS2"
+}
+(codigo de salida: 0)

@@ -1,0 +1,278 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Memoria Final TPFI</title><style>
+@page { size: A4; margin: 20mm 18mm 20mm 18mm;
+  @bottom-center { content: "UADER-FCyT-IS2 · TPFI · Julián Olivera · Página " counter(page); font: 8.5pt Arial, sans-serif; color: #555; } }
+@page :first { @bottom-center { content: none; } }
+* { box-sizing: border-box; }
+body { font: 10.5pt/1.45 Arial, Helvetica, sans-serif; color: #1a1a1a; margin: 0; }
+h1 { font-size: 17pt; color: #12395b; border-bottom: 2px solid #12395b; padding-bottom: 4px; margin: 0 0 12px; break-before: page; }
+h2 { font-size: 12.5pt; color: #12395b; margin: 16px 0 6px; break-after: avoid; }
+p { margin: 6px 0; } ul, ol { margin: 6px 0; padding-left: 20px; } li { margin: 2px 0; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 9pt; table-layout: fixed; }
+th { background: #12395b; color: #fff; text-align: left; padding: 4px 6px; }
+td { border: 1px solid #c4ccd4; padding: 4px 6px; vertical-align: top; overflow-wrap: anywhere; }
+tr { break-inside: avoid; } tbody tr:nth-child(even) td { background: #f3f6f9; }
+pre.ev { font: 8pt/1.25 "Courier New", Courier, monospace; background: #f4f4f4; border-left: 3px solid #12395b; padding: 6px 8px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0; }
+code { font: 9pt "Courier New", Courier, monospace; }
+figure { margin: 8px 0 12px; text-align: center; break-inside: avoid; }
+figure img { max-height: 225mm; border: 1px solid #c4ccd4; }
+figcaption { font-size: 8.5pt; color: #444; margin-top: 3px; }
+.cover { height: 250mm; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.cover .uni { font-size: 13pt; color: #444; } .cover .t { font-size: 27pt; color: #12395b; font-weight: bold; margin: 24px 0 8px; }
+.cover .s { font-size: 15pt; color: #12395b; margin-bottom: 40px; } .cover .d { font-size: 11pt; line-height: 1.7; }
+.note { background: #eef4fa; border-left: 3px solid #12395b; padding: 6px 10px; margin: 8px 0; }
+.toc li { margin: 3px 0; }
+h1.flow { break-before: auto; margin-top: 18px; break-after: avoid; }
+pre.ev { break-inside: avoid; }
+</style></head><body>
+<div class="cover">
+  <div class="uni">Universidad Autónoma de Entre Ríos<br>Facultad de Ciencia y Tecnología</div>
+  <div class="t">Memoria Final</div>
+  <div class="s">Trabajo Práctico Final Integrador<br>Patrón Proxy / Singleton / Observer en entorno AWS</div>
+  <div class="d">Ingeniería de Software II<br>Alumno: Julián Olivera<br>Fecha: 2 de noviembre de 2026<br>
+  Versión 1.0.0<br>Repositorio: https://github.com/julianAO2002/IS2_TPFI_OLIVERA</div>
+</div>
+
+<h1>Índice</h1>
+<ol class="toc">
+<li>Resumen</li><li>Problema</li><li>Diseño</li><li>Implementación</li><li>Pasos realizados</li>
+<li>Validación y verificación</li><li>Calidad del código</li><li>Integración y entrega continua</li>
+<li>Cambios y defectos encontrados</li><li>Limitaciones conocidas</li><li>Uso de inteligencia artificial</li>
+<li>Conclusiones</li><li>Anexo: ejecución del sistema</li>
+</ol>
+
+<h1>1. Resumen</h1>
+<p>Se desarrollaron tres programas en Python que permiten consultar y modificar datos corporativos
+alojados en AWS DynamoDB. Un servidor concentra el acceso a las tablas, deja una pista de auditoría
+de cada acción y avisa los cambios a los clientes suscriptos.</p>
+<table><colgroup><col style="width:45%"><col style="width:55%"></colgroup><thead><tr><th>Indicador</th><th>Resultado</th></tr></thead><tbody><tr><td>Pruebas automatizadas</td><td>213 aprobadas de 213: 181 unitarias y 32 de aceptación</td></tr><tr><td>Aceptación contra AWS real</td><td>32 de 32 aprobadas, en 70 segundos</td></tr><tr><td>Cobertura de código</td><td>96.88% (mínimo exigido: 85%)</td></tr><tr><td>ruff, black, PEP8, PEP257, mypy, pyright, bandit</td><td>Sin errores ni observaciones</td></tr><tr><td>TruffleHog sobre el historial</td><td>0 secretos</td></tr><tr><td>Verificación independiente</td><td>3 bloqueantes encontrados, corregidos y recomprobados</td></tr><tr><td>Workflow de CI</td><td>5 de 5 controles aprobados en cada PR, en Ubuntu y Windows</td></tr></tbody></table>
+<h2>Cumplimiento de la consigna</h2>
+<table><colgroup><col style="width:50%"><col style="width:14%"><col style="width:36%"></colgroup><thead><tr><th>Requisito del enunciado</th><th>Resultado</th><th>Evidencia</th></tr></thead><tbody><tr><td>SingletonClient: get, set, list; salida a archivo o pantalla</td><td>Cumplido</td><td>Figuras 7 a 10; <code>src/tpfi/clients/singleton_client.py</code></td></tr><tr><td>ObserverClient: suscripción, múltiples avisos, reintento</td><td>Cumplido</td><td>Figuras 6, 15 y 16</td></tr><tr><td>Servidor con Proxy, Singleton y Observer; pista auditable</td><td>Cumplido</td><td>Figuras 5 y 17; sección 3</td></tr><tr><td>Tablas accedidas con sendos Singleton</td><td>Cumplido</td><td><code>src/tpfi/persistence/</code>; pruebas de patrón</td></tr><tr><td>Suscripciones con Observer; actualizaciones con Proxy</td><td>Cumplido</td><td><code>src/tpfi/server/observer.py</code> y <code>proxy.py</code></td></tr><tr><td>Sesión con uuid4, CPU con getnode y platform</td><td>Cumplido</td><td>Figura 17; <code>corporate_log.py</code></td></tr><tr><td>Debug con logging por salida estándar, activado con -v</td><td>Cumplido</td><td>Figura 5</td></tr><tr><td>Aceptación automatizada de los 5 grupos de casos</td><td>Cumplido</td><td>Figura 20: 32 casos sobre AWS real</td></tr><tr><td>UML de actividad y de estado</td><td>Cumplido</td><td>Figuras 1 y 2</td></tr><tr><td>Pruebas que verifican los patrones</td><td>Cumplido</td><td>Sección 6.2</td></tr><tr><td>venv, CookieCutter, CONTEXT, README, CHANGELOG, requirements, MIT, VERSION, BUILD</td><td>Cumplido</td><td>Raíz del repositorio; sección 5</td></tr><tr><td>ruff, black, PEP8, PEP257, MyPy, PyRight sin errores</td><td>Cumplido</td><td>Figura 18</td></tr><tr><td>Pytest con cobertura de 85% o mejor</td><td>Cumplido: 96.88%</td><td>Figura 19</td></tr><tr><td>bandit sin observaciones</td><td>Cumplido</td><td>Figura 18</td></tr><tr><td>Trufflehog (opcional)</td><td>Cumplido</td><td>Figura 21 y job de CI</td></tr><tr><td>Workflow de CI/CD en GitHub</td><td>Cumplido</td><td>Figuras 24 a 27</td></tr><tr><td>Documentación con pdoc actualizada con cada PR</td><td>Cumplido</td><td>Figuras 28 y 29</td></tr></tbody></table>
+
+<h1>2. Problema</h1>
+<p>Un sistema aplicativo necesita servicios corporativos centralizados: dirección oficial, CUIT,
+teléfono de contacto e identificador único de secuencia. Se implementan tres funciones (recuperar,
+modificar y listar) sobre dos tablas de DynamoDB que ya existen: <code>CorporateData</code>, con los
+datos, y <code>CorporateLog</code>, con los registros de acceso y modificación.</p>
+<h2>Puntos del enunciado que requirieron una decisión</h2>
+<table><colgroup><col style="width:55%"><col style="width:45%"></colgroup><thead><tr><th>Situación</th><th>Decisión</th></tr></thead><tbody><tr><td>La Ilustración 1 muestra GET para subscribe, pero el texto dice POST tres veces.</td><td>Se sigue el texto: todos los pedidos usan POST.</td></tr><tr><td>La nota de aplicación indica la región us-west-2.</td><td>Las tablas y las credenciales están en us-east-1. La región se toma del perfil de AWS, no del código.</td></tr><tr><td>La Ilustración 1 incluye una respuesta OK||Error del observador al servidor; el texto no la describe.</td><td>No se implementa ese mensaje. El servidor detecta la caída de un suscripto por el fallo de envío o el cierre del socket.</td></tr><tr><td>El enunciado nombra REQUIREMENTS.TXT y requirements.txt.</td><td>Se usa <code>requirements.txt</code>, el nombre que entiende pip por convención.</td></tr><tr><td>CorporateData es compartida por todos los alumnos.</td><td>Las pruebas reales solo escriben claves <code>OLIVERA-TEST-</code> y solo borran esas claves.</td></tr></tbody></table>
+
+<h1>3. Diseño</h1>
+<h2>Arquitectura</h2>
+<p>Los clientes se conectan al servidor por TCP. Cada conexión se atiende en un hilo propio y cada
+pedido pasa por el proxy, que audita y recién después delega en el servicio real.</p>
+<pre class="ev">Clientes --TCP (JSON con POST)--&gt; Servidor --&gt; Proxy --&gt; Servicio real --&gt; CorporateData
+                                                |                          (Singleton)
+                                                |--&gt; CorporateLog (Singleton)
+                                                &#x27;--&gt; Suscripciones (Observer) --&gt; Clientes</pre>
+<h2>Patrones</h2>
+<table><colgroup><col style="width:13%"><col style="width:43%"><col style="width:44%"></colgroup><thead><tr><th>Patrón</th><th>Problema que resuelve</th><th>Implementación</th></tr></thead><tbody><tr><td>Singleton</td><td>Varios hilos necesitan acceder a las tablas; debe haber un solo punto de acceso por tabla.</td><td>Metaclase <code>SingletonMeta</code> con un lock; la usan <code>CorporateDataTable</code> y <code>CorporateLogTable</code>.</td></tr><tr><td>Proxy</td><td>Toda operación debe auditarse, y los cambios deben notificarse, sin mezclar esas reglas con el acceso a datos.</td><td><code>CorporateServiceProxy</code> implementa la misma interfaz que <code>RealCorporateService</code>. Si la auditoría falla, la operación no se ejecuta.</td></tr><tr><td>Observer</td><td>Hay que avisar a una cantidad variable de clientes sin que quien modifica datos los conozca.</td><td><code>SubscriptionManager</code> es el sujeto y <code>SocketObserver</code> el observador concreto, con su propia cola de envío.</td></tr></tbody></table>
+<h2>Decisiones técnicas</h2>
+<table><colgroup><col style="width:38%"><col style="width:62%"></colgroup><thead><tr><th>Decisión</th><th>Motivo</th></tr></thead><tbody><tr><td>Mensajes con cabecera <code>Content-Length</code></td><td>TCP entrega un flujo de bytes: sin esa cabecera el receptor no sabe dónde termina cada mensaje.</td></tr><tr><td>Escrituras condicionales en DynamoDB</td><td>Leer y luego escribir permitiría que dos clientes se pisen. La condición se evalúa de forma atómica.</td></tr><tr><td>Lock dentro de cada tabla</td><td>Los recursos de boto3 no son seguros entre hilos y la instancia Singleton es compartida.</td></tr><tr><td>Auditar antes de operar</td><td>Así no puede existir un cambio sin registro. Un intento fallido queda registrado igual.</td></tr><tr><td><code>socket.create_server</code></td><td>Resuelve la diferencia entre sistemas: en Windows, SO_REUSEADDR permitiría dos servidores en el mismo puerto.</td></tr><tr><td>Validación en cliente y en servidor</td><td>El cliente falla antes de conectarse, y el servidor nunca confía en lo que recibe por la red.</td></tr></tbody></table>
+<h2>Diagrama de actividad: list, get y set</h2>
+<figure><img src="../uml/actividad_proxy.png" style="width:82%" alt="Actividad de la gestión de list, get y set en el servidor (patrón Proxy)."><figcaption>Figura 1. Actividad de la gestión de list, get y set en el servidor (patrón Proxy).</figcaption></figure>
+<h2>Diagrama de estado: suscripción</h2>
+<figure><img src="../uml/estado_observer.png" style="width:62%" alt="Estado de una suscripción en el servidor (patrón Observer)."><figcaption>Figura 2. Estado de una suscripción en el servidor (patrón Observer).</figcaption></figure>
+<h2>Diagrama de clases</h2>
+<figure><img src="../uml/clases_patrones.png" style="width:80%" alt="Clases que implementan los tres patrones."><figcaption>Figura 3. Clases que implementan los tres patrones.</figcaption></figure>
+
+<h1>4. Implementación</h1>
+<pre class="ev">singletonproxyobserver.py    Lanzador del servidor
+singletonclient.py           Lanzador del cliente de consultas
+observerclient.py            Lanzador del cliente suscriptor
+src/tpfi/common/             Protocolo, errores, línea de comandos y versión
+src/tpfi/persistence/        Singleton y acceso a CorporateData y CorporateLog
+src/tpfi/server/             Proxy, Observer, servicio real y servidor TCP
+src/tpfi/clients/            SingletonClient y ObserverClient
+tests/unit/                  Pruebas unitarias y de patrones
+tests/acceptance/            Pruebas de aceptación con procesos reales
+docs/                        UML, evidencias y memoria</pre>
+<p>Todo el código está en clases, salvo los lanzadores y las funciones de utilidad. Los comentarios y
+docstrings están en español y explican el porqué de cada decisión. Los identificadores están en
+inglés, para coincidir con los nombres de los patrones y del enunciado.</p>
+<h2>Formato de los mensajes</h2>
+<pre class="ev">POST /tpfi HTTP/1.1
+Host: localhost
+Content-Type: application/json
+Content-Length: 67
+
+{&quot;UUID&quot;: &quot;39908810720395&quot;, &quot;ID&quot;: &quot;UADER-FCyT-IS2&quot;, &quot;ACTION&quot;: &quot;get&quot;}</pre>
+<p>Las respuestas exitosas devuelven el tuple o el arreglo de tuples. Los errores devuelven
+<code>{"Error": "descripción"}</code>. Cada suscriptor recibe
+<code>{"UUID", "ID", "ACTION": "change", "DATA"}</code>, según la Ilustración 1.</p>
+
+<h1>5. Pasos realizados</h1>
+<ol>
+<li><b>Análisis.</b> Lectura del enunciado, la nota de aplicación y los programas de diagnóstico.
+Consulta del esquema real de las tablas: clave <code>id</code> de tipo texto, y capacidad de lectura
+de 1 RCU en CorporateData y 10 en CorporateLog.</li>
+<li><b>Esqueleto.</b> Generación con cookiecutter-pypackage (primer commit, sin modificar).</li>
+<li><b>Ambiente.</b> Creación del venv e instalación de versiones fijas con <code>requirements.txt</code>.</li>
+<li><b>Herramientas.</b> Configuración de ruff, black, pycodestyle, pydocstyle, mypy, pyright, bandit,
+pytest y los workflows de CI y CD.</li>
+<li><b>Protocolo y Singleton.</b> Desarrollo guiado por pruebas: primero la prueba que falla y después
+el código.</li>
+<li><b>Proxy, Observer y servidor.</b> Mismo método.</li>
+<li><b>Clientes.</b> SingletonClient y ObserverClient, con reconexión.</li>
+<li><b>Aceptación.</b> Primero contra un DynamoDB simulado (moto) y después contra AWS real.</li>
+<li><b>Revisión.</b> Revisión independiente por lentes de riesgo, resiliencia y fiabilidad.</li>
+<li><b>Publicación.</b> Repositorio en GitHub, con búsqueda de secretos previa al primer push.</li>
+<li><b>Integración.</b> PR 1, PR 6 y PR 7 integrados con todos los controles aprobados.</li>
+<li><b>Evidencias.</b> Corridas reales y capturas sobre el código final.</li>
+<li><b>Verificación independiente.</b> Comprobación de cada requisito en una copia limpia, y corrección de lo encontrado.</li>
+<li><b>Memoria.</b> Este documento, generado a partir de las salidas guardadas.</li>
+</ol>
+<h2>Commits principales</h2>
+<table><colgroup><col style="width:18%"><col style="width:82%"></colgroup><thead><tr><th>Commit</th><th>Descripción</th></tr></thead><tbody><tr><td>0716354</td><td>Esqueleto generado con cookiecutter-pypackage</td></tr><tr><td>7e4feb5</td><td>Herramientas de calidad, CI y CD</td></tr><tr><td>40b751e</td><td>Protocolo y acceso Singleton a DynamoDB</td></tr><tr><td>ba40c72</td><td>Servidor Proxy y Observer, clientes y pruebas de aceptación</td></tr><tr><td>ffccc45</td><td>La auditoría se lee por clave, para no agotar la capacidad de CorporateLog</td></tr><tr><td>8956a17</td><td>Cola de envío por suscriptor, para no frenar los set</td></tr><tr><td>cca859d</td><td>Registro de build 2, cambios y prueba de versión</td></tr><tr><td>bb852c9</td><td>Documentación de todos los módulos y verificación de las páginas generadas</td></tr><tr><td>c90219f</td><td>Exportación del paquete y pruebas de la generación de documentación</td></tr><tr><td>e31d668</td><td>Liberación de hilos de suscriptores, validación del host y trazas del observador</td></tr></tbody></table>
+
+<h1>6. Validación y verificación</h1>
+<div class="note">Salvo aclaración, las capturas son de ventanas reales de terminal, ejecutando los
+programas contra las tablas reales de AWS. Las salidas completas están en
+<code>docs/evidencias/salidas</code> y los logs de debug de las pruebas en <code>docs/evidencias/logs</code>.
+El UUID que se ve es el número de CPU obtenido con <code>uuid.getnode()</code>.</div>
+<h2>6.1 Casos de prueba de aceptación</h2>
+<table><colgroup><col style="width:36%"><col style="width:9%"><col style="width:55%"></colgroup><thead><tr><th>Grupo del enunciado</th><th>Casos</th><th>Qué se verifica</th></tr></thead><tbody><tr><td>Camino feliz de cada acción</td><td>7</td><td>get, set, list y subscribe; archivo de salida; registro en CorporateLog</td></tr><tr><td>Argumentos malformados (cada programa)</td><td>10</td><td>Terminan con código 2 y mensaje de error</td></tr><tr><td>Sin datos mínimos</td><td>11</td><td>Se rechazan en cliente y servidor; las tablas no cambian</td></tr><tr><td>Servidor caído</td><td>3</td><td>Error en el cliente; el observador reintenta y se vuelve a suscribir</td></tr><tr><td>Levantar dos veces el servidor</td><td>1</td><td>El segundo falla y el primero sigue atendiendo</td></tr></tbody></table>
+<p>Cada prueba lee las tablas directamente con boto3, sin pasar por el sistema bajo prueba. Por eso el
+resultado no depende de lo que el sistema dice haber hecho.</p>
+<h2>6.2 Pruebas de los patrones</h2>
+<table><colgroup><col style="width:16%"><col style="width:84%"></colgroup><thead><tr><th>Patrón</th><th>Qué demuestran las pruebas</th></tr></thead><tbody><tr><td>Singleton</td><td>Dos construcciones devuelven el mismo objeto; cada tabla tiene su instancia; 16 hilos simultáneos reciben la misma; el constructor corre una sola vez.</td></tr><tr><td>Proxy</td><td>Comparte la interfaz con el servicio real y delega en él; audita antes de operar; sin auditoría no toca el servicio real; solo un set exitoso notifica.</td></tr><tr><td>Observer</td><td>Notifica a todos; admite varias suscripciones del mismo UUID; un suscripto caído o trabado no afecta a los demás; los avisos llegan en orden.</td></tr></tbody></table>
+<h2>6.3 Diagnóstico del ambiente</h2>
+<figure><img src="../evidencias/capturas/01_diagnostico.png" style="width:92%" alt="Condición: acceso a las tablas verificado con el programa IS2_TPFI_test.py de la cátedra."><figcaption>Figura 4. Condición: acceso a las tablas verificado con el programa IS2_TPFI_test.py de la cátedra.</figcaption></figure>
+<h2>6.4 Camino feliz</h2>
+<figure><img src="../evidencias/capturas/02_servidor.png" style="width:92%" alt="Condición: traza del servidor con -v. Cada acción muestra su sesión uuid4 y su clave de auditoría."><figcaption>Figura 5. Condición: traza del servidor con -v. Cada acción muestra su sesión uuid4 y su clave de auditoría.</figcaption></figure>
+<figure><img src="../evidencias/capturas/03_observador.png" style="width:92%" alt="Condición: el observador recibe cada cambio (subscribe) y mantiene abierto el socket."><figcaption>Figura 6. Condición: el observador recibe cada cambio (subscribe) y mantiene abierto el socket.</figcaption></figure>
+<figure><img src="../evidencias/capturas/04_set_crea.png" style="width:92%" alt="Condición: set de una clave nueva, con todos los campos del tuple."><figcaption>Figura 7. Condición: set de una clave nueva, con todos los campos del tuple.</figcaption></figure>
+<figure><img src="../evidencias/capturas/05_get.png" style="width:92%" alt="Condición: get con el pedido de entrada y la salida grabada en output_get.json."><figcaption>Figura 8. Condición: get con el pedido de entrada y la salida grabada en output_get.json.</figcaption></figure>
+<figure><img src="../evidencias/capturas/06_list.png" style="width:92%" alt="Condición: list devuelve un arreglo con todos los tuples de la tabla."><figcaption>Figura 9. Condición: list devuelve un arreglo con todos los tuples de la tabla.</figcaption></figure>
+<figure><img src="../evidencias/capturas/07_set_parcial.png" style="width:92%" alt="Condición: set de un solo campo; los demás no se modifican."><figcaption>Figura 10. Condición: set de un solo campo; los demás no se modifican.</figcaption></figure>
+<h2>6.5 Casos de error</h2>
+<figure><img src="../evidencias/capturas/08_argumentos.png" style="width:92%" alt="Condición: argumentos malformados en cada programa (código de salida 2)."><figcaption>Figura 11. Condición: argumentos malformados en cada programa (código de salida 2).</figcaption></figure>
+<figure><img src="../evidencias/capturas/09_datos_minimos.png" style="width:92%" alt="Condición: pedidos sin datos mínimos y registro inexistente."><figcaption>Figura 12. Condición: pedidos sin datos mínimos y registro inexistente.</figcaption></figure>
+<figure><img src="../evidencias/capturas/10_doble_servidor.png" style="width:92%" alt="Condición: intento de levantar dos veces el servidor."><figcaption>Figura 13. Condición: intento de levantar dos veces el servidor.</figcaption></figure>
+<figure><img src="../evidencias/capturas/11_servidor_caido.png" style="width:92%" alt="Condición: SingletonClient con el servidor caído."><figcaption>Figura 14. Condición: SingletonClient con el servidor caído.</figcaption></figure>
+<figure><img src="../evidencias/capturas/12_observador_reintenta.png" style="width:92%" alt="Condición: ObserverClient reintenta con el servidor caído (-r=5)."><figcaption>Figura 15. Condición: ObserverClient reintenta con el servidor caído (-r=5).</figcaption></figure>
+<figure><img src="../evidencias/capturas/13_observador_resuscribe.png" style="width:92%" alt="Condición: al volver el servidor, ObserverClient se suscribe de nuevo solo."><figcaption>Figura 16. Condición: al volver el servidor, ObserverClient se suscribe de nuevo solo.</figcaption></figure>
+<h2>6.6 Impacto en las tablas</h2>
+<figure><img src="../evidencias/capturas/14_tablas.png" style="width:92%" alt="Condición: lectura directa con AWS CLI de CorporateData y de la fila de auditoría del set."><figcaption>Figura 17. Condición: lectura directa con AWS CLI de CorporateData y de la fila de auditoría del set.</figcaption></figure>
+
+<h1>7. Calidad del código</h1>
+<table><colgroup><col style="width:25%"><col style="width:45%"><col style="width:30%"></colgroup><thead><tr><th>Herramienta</th><th>Control</th><th>Resultado</th></tr></thead><tbody><tr><td>ruff</td><td>Reglas de formato y errores frecuentes</td><td>Sin errores</td></tr><tr><td>black</td><td>Formato consistente</td><td>Sin cambios pendientes</td></tr><tr><td>pycodestyle</td><td>PEP8</td><td>Sin errores</td></tr><tr><td>pydocstyle</td><td>PEP257 en docstrings</td><td>Sin errores</td></tr><tr><td>mypy</td><td>Tipos, en modo estricto</td><td>Sin errores</td></tr><tr><td>pyright</td><td>Tipos</td><td>0 errores, 0 advertencias</td></tr><tr><td>bandit</td><td>Seguridad básica</td><td>Sin observaciones</td></tr><tr><td>pytest</td><td>Pruebas y cobertura</td><td>213 aprobadas, 96.88%</td></tr><tr><td>TruffleHog 3.99.8</td><td>Secretos en el historial</td><td>0 verificados, 0 sin verificar</td></tr></tbody></table>
+<figure><img src="../evidencias/capturas/15_calidad_estatica.png" style="width:92%" alt="Condición: ruff, black, PEP8, PEP257, mypy, pyright y bandit terminan con código 0."><figcaption>Figura 18. Condición: ruff, black, PEP8, PEP257, mypy, pyright y bandit terminan con código 0.</figcaption></figure>
+<figure><img src="../evidencias/capturas/16_cobertura.png" style="width:92%" alt="Condición: 213 pruebas aprobadas y cobertura de 96.88%."><figcaption>Figura 19. Condición: 213 pruebas aprobadas y cobertura de 96.88%.</figcaption></figure>
+<h2>Cobertura por módulo</h2>
+<pre class="ev">Name                                     Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------------------
+src\tpfi\__init__.py                         3      0      0      0   100%
+src\tpfi\clients\__init__.py                 0      0      0      0   100%
+src\tpfi\clients\observer_client.py         87      0     14      0   100%
+src\tpfi\clients\singleton_client.py        66      0      4      0   100%
+src\tpfi\common\__init__.py                  0      0      0      0   100%
+src\tpfi\common\cli.py                      43      0     12      1    98%   70-&gt;69
+src\tpfi\common\errors.py                   14      0      0      0   100%
+src\tpfi\common\protocol.py                128      1     44      1    99%   235
+src\tpfi\common\version.py                   9      2      0      0    78%   17-19
+src\tpfi\persistence\__init__.py             0      0      0      0   100%
+src\tpfi\persistence\corporate_data.py      59      2      6      2    94%   73, 78
+src\tpfi\persistence\corporate_log.py       31      0      2      0   100%
+src\tpfi\persistence\dynamodb.py            23      3      0      0    87%   31-34
+src\tpfi\persistence\singleton.py           14      0      2      0   100%
+src\tpfi\server\__init__.py                  0      0      0      0   100%
+src\tpfi\server\app.py                     147      7     26      8    91%   60, 80, 81-&gt;exit, 90, 97-&gt;99, 154, 179-&gt;exit, 181-&gt;179, 184, 191-192
+src\tpfi\server\observer.py                 74      0      8      0   100%
+src\tpfi\server\proxy.py                    31      0      0      0   100%
+src\tpfi\server\service.py                  17      0      2      0   100%
+------------------------------------------------------------------------------------
+TOTAL                                      746     15    120     12    97%</pre>
+<p>Las líneas sin cubrir corresponden a fallos del entorno difíciles de provocar, como la falta de
+región de AWS o la ausencia de los archivos VERSION y BUILD.</p>
+<figure><img src="../evidencias/capturas/17_aceptacion_aws.png" style="width:92%" alt="Condición: 32 pruebas de aceptación aprobadas contra las tablas reales de AWS."><figcaption>Figura 20. Condición: 32 pruebas de aceptación aprobadas contra las tablas reales de AWS.</figcaption></figure>
+<figure><img src="../evidencias/capturas/18_trufflehog.png" style="width:92%" alt="Condición: TruffleHog sobre todo el historial de git, sin secretos."><figcaption>Figura 21. Condición: TruffleHog sobre todo el historial de git, sin secretos.</figcaption></figure>
+<h2>Manejo de credenciales</h2>
+<ul>
+<li>Las credenciales nunca se escriben en el código: boto3 las toma del perfil de AWS.</li>
+<li>El archivo de credenciales de la cátedra queda fuera del repositorio.</li>
+<li><code>.gitignore</code> excluye <code>*credentials*.json</code> y <code>*.pem</code>.</li>
+<li>Además de TruffleHog, se buscó el valor literal de la clave en archivos e historial: 0 coincidencias.</li>
+<li>El CI no recibe credenciales de AWS: sus pruebas usan moto.</li>
+</ul>
+
+<h1>8. Integración y entrega continua</h1>
+<table><colgroup><col style="width:22%"><col style="width:18%"><col style="width:60%"></colgroup><thead><tr><th>Workflow</th><th>Se dispara</th><th>Qué hace</th></tr></thead><tbody><tr><td>CI (<code>ci.yml</code>)</td><td>En cada PR</td><td>Calidad estática; pruebas en Ubuntu y Windows con cobertura mínima de 85%; TruffleHog; documentación pdoc.</td></tr><tr><td>CD (<code>cd.yml</code>)</td><td>Al integrar en main</td><td>Repite el CI como compuerta; construye el paquete; publica la documentación en GitHub Pages.</td></tr></tbody></table>
+<p>Las acciones están fijadas por hash de commit, para que nadie pueda cambiar su contenido sin que se
+note. Las capturas de esta sección se tomaron sin iniciar sesión, desde el sitio público.</p>
+<figure><img src="../evidencias/capturas/20_repositorio.png" style="width:80%" alt="Condición: repositorio público en GitHub."><figcaption>Figura 22. Condición: repositorio público en GitHub.</figcaption></figure>
+<figure><img src="../evidencias/capturas/21_pull_requests.png" style="width:80%" alt="Condición: PRs del proyecto."><figcaption>Figura 23. Condición: PRs del proyecto.</figcaption></figure>
+<figure><img src="../evidencias/capturas/22_pr_checks.png" style="width:76%" alt="Condición: PR 6 integrado con sus 5 controles aprobados."><figcaption>Figura 24. Condición: PR 6 integrado con sus 5 controles aprobados.</figcaption></figure>
+<figure><img src="../evidencias/capturas/23_actions.png" style="width:80%" alt="Condición: historial de ejecuciones de los workflows."><figcaption>Figura 25. Condición: historial de ejecuciones de los workflows.</figcaption></figure>
+<figure><img src="../evidencias/capturas/24_ci_run.png" style="width:80%" alt="Condición: ejecución de CI del PR 6."><figcaption>Figura 26. Condición: ejecución de CI del PR 6.</figcaption></figure>
+<figure><img src="../evidencias/capturas/25_cd_run.png" style="width:80%" alt="Condición: ejecución de CD: compuerta, paquete, documentación y publicación."><figcaption>Figura 27. Condición: ejecución de CD: compuerta, paquete, documentación y publicación.</figcaption></figure>
+<figure><img src="../evidencias/capturas/26_docs_pages.png" style="width:80%" alt="Condición: documentación publicada; actualizada al integrar el PR 7."><figcaption>Figura 28. Condición: documentación publicada; actualizada al integrar el PR 7.</figcaption></figure>
+<figure><img src="../evidencias/capturas/27_docs_proxy.png" style="width:80%" alt="Condición: documentación del módulo proxy generada desde los docstrings."><figcaption>Figura 29. Condición: documentación del módulo proxy generada desde los docstrings.</figcaption></figure>
+<p>Documentación publicada: https://julianao2002.github.io/IS2_TPFI_OLIVERA/tpfi.html</p>
+
+<h1>9. Cambios y defectos encontrados</h1>
+<p>Esta sección registra los problemas reales del desarrollo, porque muestran qué detectó cada
+técnica de verificación.</p>
+<table><colgroup><col style="width:46%"><col style="width:24%"><col style="width:30%"></colgroup><thead><tr><th>Defecto</th><th>Quién lo detectó</th><th>Corrección</th></tr></thead><tbody><tr><td><code>MessageReader</code> perdía un mensaje parcial si <code>recv</code> vencía su plazo, porque consumía la cabecera antes de tener el cuerpo.</td><td>Prueba unitaria escrita antes de implementar el cliente</td><td>Los bytes se consumen recién con el mensaje completo.</td></tr><tr><td>Un suscripto trabado demoraba la respuesta del set hasta 5 segundos por cliente. Con varios, el cliente podía recibir un timeout aunque el dato ya estuviera guardado.</td><td>Revisión de resiliencia (severidad crítica)</td><td>Cada <code>SocketObserver</code> tiene una cola acotada y un hilo de envío. Se agregaron 5 pruebas.</td></tr><tr><td>La primera corrida real falló en 8 de 32 casos con <code>ProvisionedThroughputExceededException</code>. El arnés de pruebas hacía un <code>Scan</code> de CorporateLog por prueba.</td><td>Corrida contra AWS real (moto no limita la capacidad)</td><td>Cada fila se lee por clave con <code>GetItem</code>. El sistema no tenía el defecto; lo tenía el arnés.</td></tr><tr><td>La documentación publicada no incluía los módulos: <code>__all__</code> limitaba a pdoc y el CI solo comprobaba que pdoc terminara bien.</td><td>Revisión de las capturas de esta memoria (la página del módulo proxy daba 404)</td><td><code>__all__</code> incluye los subpaquetes, y <code>build_docs.py</code> falla si falta una página. Se agregaron 4 pruebas.</td></tr><tr><td>Cada suscriptor que se desconectaba dejaba un hilo vivo para siempre. Lo introdujo la corrección de la cola.</td><td>Verificador independiente (40 ciclos: de 9 a 49 hilos)</td><td>Al terminar la conexión se cierra el observador. Si la auditoría falla, se detiene el hilo sin cerrar el socket, que aún debe informar el error.</td></tr><tr><td><code>-s</code> sin validar: <code>-s=a..b</code> terminaba con un traceback y <code>-s=</code> se conectaba a la propia máquina.</td><td>Verificador independiente</td><td>Validación en la línea de comandos: código de salida 2 y mensaje claro. <code>UnicodeError</code> no es <code>OSError</code>, por eso se escapaba.</td></tr><tr><td><code>observerclient.py -v</code> no mostraba nada durante la operación normal.</td><td>Verificador independiente</td><td>Trazas de debug al suscribirse, al confirmarse y al recibir cada aviso.</td></tr><tr><td>Los archivos de entrada UTF-8 con BOM, que genera PowerShell, se rechazaban con un mensaje engañoso.</td><td>Verificador independiente (observación)</td><td>El cliente descarta la marca BOM.</td></tr><tr><td>El esqueleto incluía <code>dependabot.yml</code>, que abrió 4 PRs sobre workflows ya descartados.</td><td>Revisión del estado de GitHub</td><td>Se cerraron con explicación; el archivo ya se había quitado en el PR 1.</td></tr></tbody></table>
+<div class="note">Impacto del tercer defecto: durante unos 5 minutos, el arnés consumió capacidad de
+lectura de una tabla compartida con otros alumnos, lo que pudo demorar sus lecturas. La corrida
+corregida tomó 70 segundos, contra 289 de la original.</div>
+<h2>Revisión independiente</h2>
+<p>El código se revisó con Gentle AI por tramos, porque el cambio completo superaba el tamaño admitido.
+El tramo del servidor pasó por las lentes de riesgo, resiliencia y fiabilidad, con una corrección. El
+tramo de protocolo y persistencia pasó por las lentes de riesgo y fiabilidad, sin correcciones. El arreglo de la documentación pasó por la lente de fiabilidad.</p>
+<h2>Verificación independiente</h2>
+<p>Un agente sin acceso al contexto del desarrollo comprobó cada requisito en una copia limpia del
+repositorio, contra moto y con sus propias pruebas de caja negra. Encontró 3 defectos bloqueantes que no
+habían detectado ni las pruebas automatizadas ni la revisión. Se corrigieron juntos, con pruebas que
+primero fallaron, y una recomprobación limitada a esos defectos confirmó la corrección: el servidor
+mantuvo 8 hilos a lo largo de 80 ciclos de suscripción. También confirmó que un hash de ambas tablas no
+cambia tras 44 pedidos rechazados.</p>
+<h2>Registro de versiones</h2>
+<table><colgroup><col style="width:12%"><col style="width:88%"></colgroup><thead><tr><th>Build</th><th>Contenido</th></tr></thead><tbody><tr><td>1</td><td>Esqueleto, herramientas, CI/CD, protocolo y persistencia Singleton</td></tr><tr><td>2</td><td>Servidor, Proxy, Observer, clientes y aceptación</td></tr><tr><td>3</td><td>Documentación pdoc con todos los módulos</td></tr><tr><td>4</td><td>UML, evidencias, memoria, README completo y corrección de los defectos de la verificación independiente</td></tr></tbody></table>
+<p>Todas las corridas y capturas de terminal de esta memoria se hicieron sobre el build 4.</p>
+
+<h1>10. Limitaciones conocidas</h1>
+<p>La revisión dejó observaciones que no bloquean la entrega. No se resolvieron porque el enunciado no
+las pide, pero un sistema productivo tendría que atenderlas.</p>
+<table><colgroup><col style="width:36%"><col style="width:34%"><col style="width:30%"></colgroup><thead><tr><th>Limitación</th><th>Consecuencia</th><th>Cómo se resolvería</th></tr></thead><tbody><tr><td>El servidor no autentica a los clientes</td><td>Quien alcance el puerto puede leer y modificar datos</td><td>Autenticación por token, o limitar la red de acceso</td></tr><tr><td>El UUID lo informa el cliente</td><td>La pista de auditoría se puede falsificar</td><td>Asociar la identidad a una credencial verificada</td></tr><tr><td>La comunicación no está cifrada</td><td>Los datos viajan legibles por la red</td><td>Usar TLS</td></tr><tr><td>Un hilo por conexión, sin tope</td><td>Muchas conexiones pueden agotar recursos</td><td>Usar un conjunto de hilos con límite</td></tr><tr><td>El apagado no espera a los hilos en curso</td><td>Una respuesta puede quedar cortada al cerrar</td><td>Apagado ordenado con espera</td></tr><tr><td>La cancelación manual no tiene prueba automatizada con señal real</td><td>Se simula la excepción; el verificador comprobó a mano que Ctrl+C termina con código 0</td><td>Prueba con señal real por proceso</td></tr><tr><td>Un <code>set</code> de una clave nueva sin campos se rechaza</td><td>Es una interpretación de los datos mínimos: el enunciado podría leerse como crear una fila en blanco</td><td>Confirmar el criterio con la cátedra</td></tr></tbody></table>
+<p>Además, las evidencias públicas incluyen el identificador de CPU, derivado de la dirección MAC, porque
+el enunciado exige registrarlo.</p>
+
+<h1 class="flow">11. Uso de inteligencia artificial</h1>
+<p>El enunciado permite usar herramientas de IA si se documentan los prompts. Se usó Claude Code con el
+modelo Claude Opus 5.5. La herramienta leyó el enunciado, propuso el diseño, escribió el código, las
+pruebas, los diagramas, los workflows y esta memoria, y ejecutó las verificaciones. Gentle AI aportó la
+revisión por lentes, y un agente separado hizo la verificación independiente. Los prompts están registrados textualmente en <code>CONTEXT.md</code>.</p>
+
+<h1 class="flow">12. Conclusiones</h1>
+<ul>
+<li>Los tres patrones separan bien las responsabilidades: agregar auditoría o notificaciones no
+requirió tocar el acceso a datos.</li>
+<li>Cada técnica encontró defectos distintos. La prueba unitaria detectó el error de lectura, el
+entorno real detectó el límite de capacidad, la revisión detectó el bloqueo por suscriptores trabados y
+la verificación independiente detectó la fuga de hilos. Ninguna de ellas por sí sola los habría
+encontrado todos.</li>
+<li>Una corrección también puede introducir defectos: la fuga de hilos vino de la corrección del
+bloqueo, y solo se vio al probar el comportamiento desde afuera.</li>
+<li>Un entorno simulado es útil pero no alcanza: las pruebas pasaban 32 de 32 contra moto y 24 de 32
+contra AWS en la primera corrida.</li>
+<li>La automatización de los controles permitió repetirlos en cada cambio, con el mismo criterio en la
+máquina local y en GitHub.</li>
+</ul>
+
+<h1 class="flow">13. Anexo: ejecución del sistema</h1>
+<pre class="ev">python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt
+aws configure
+
+python singletonproxyobserver.py -v
+python observerclient.py -o=avisos.json
+python singletonclient.py -i=examples/input_set.json
+python singletonclient.py -i=examples/input_get.json -o=output.json
+python singletonclient.py -i=examples/input_list.json
+
+python scripts/quality.py
+python -m pytest tests/acceptance -m acceptance</pre>
+<p>Repositorio: https://github.com/julianAO2002/IS2_TPFI_OLIVERA</p>
+</body></html>

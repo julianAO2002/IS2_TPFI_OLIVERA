@@ -9,6 +9,7 @@ operación y con 2 si los argumentos están mal escritos.
 """
 
 import argparse
+import codecs
 import logging
 import socket
 import sys
@@ -16,7 +17,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from tpfi.common.cli import ArgumentParser, configure_logging, port_number
+from tpfi.common.cli import ArgumentParser, configure_logging, host_name, port_number
 from tpfi.common.errors import ServerUnavailableError, TpfiError, ValidationError
 from tpfi.common.protocol import (
     CLIENT_ACTIONS,
@@ -47,7 +48,8 @@ class SingletonClient:
     def load_request(path: Path) -> Any:
         """Lee el archivo JSON de entrada."""
         try:
-            return parse_json_body(path.read_bytes())
+            # PowerShell puede guardar el archivo con la marca BOM de UTF-8 al inicio.
+            return parse_json_body(path.read_bytes().removeprefix(codecs.BOM_UTF8))
         except OSError as error:
             raise ValidationError(f"No se pudo leer el archivo de entrada {path}.") from error
 
@@ -83,7 +85,9 @@ def parse_arguments(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = ArgumentParser("Consulta o modifica datos corporativos.")
     parser.add_argument("-i", "--input", type=Path, required=True, help="archivo JSON con el pedido")
     parser.add_argument("-o", "--output", type=Path, help="archivo de salida (por defecto, la salida estándar)")
-    parser.add_argument("-s", "--server", default=DEFAULT_HOST, help="host del servidor (por defecto localhost)")
+    parser.add_argument(
+        "-s", "--server", type=host_name, default=DEFAULT_HOST, help="host del servidor (por defecto localhost)"
+    )
     parser.add_argument("-p", "--port", type=port_number, default=DEFAULT_PORT, help="puerto (por defecto 8080)")
     parser.add_argument("-v", "--verbose", action="store_true", help="activa los mensajes de debug")
     return parser.parse_args(argv)

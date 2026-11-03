@@ -1,0 +1,19 @@
+PS IS2_TPFI> python -m ruff check .
+All checks passed!
+(codigo de salida: 0)
+PS IS2_TPFI> python -m black --check .
+All done! ✨ 🍰 ✨
+39 files would be left unchanged.
+(codigo de salida: 0)
+PS IS2_TPFI> python -m pycodestyle --max-line-length=120 --ignore=E203,W503 src tests scripts singletonclient.py observerclient.py singletonproxyobserver.py
+(codigo de salida: 0)
+PS IS2_TPFI> python -m pydocstyle --convention=pep257 src scripts singletonclient.py observerclient.py singletonproxyobserver.py
+(codigo de salida: 0)
+PS IS2_TPFI> python -m mypy
+Success: no issues found in 39 source files
+(codigo de salida: 0)
+PS IS2_TPFI> python -m pyright
+0 errors, 0 warnings, 0 informations
+(codigo de salida: 0)
+PS IS2_TPFI> python -m bandit -q -c pyproject.toml -r src scripts singletonclient.py observerclient.py singletonproxyobserver.py
+(codigo de salida: 0)

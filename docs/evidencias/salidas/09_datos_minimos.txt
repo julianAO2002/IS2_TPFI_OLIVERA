@@ -1,0 +1,20 @@
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\get_sin_id.json
+{
+  "Error": "Falta el dato obligatorio ID o no es un texto válido."
+}
+(codigo de salida: 1)
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\set_sin_datos.json
+{
+  "Error": "La acción \"set\" requiere al menos un campo del tuple CorporateData."
+}
+(codigo de salida: 1)
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\sin_uuid.json
+{
+  "Error": "Falta el dato obligatorio UUID o no es un texto válido."
+}
+(codigo de salida: 1)
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\get_inexistente.json
+{
+  "Error": "No existe el registro OLIVERA-NO-EXISTE."
+}
+(codigo de salida: 1)

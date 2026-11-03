@@ -1,0 +1,35 @@
+@startuml estado_observer
+!pragma layout smetana
+title Estado: gestión de una suscripción en el servidor (patrón Observer)
+skinparam shadowing false
+skinparam defaultFontName Arial
+hide empty description
+
+[*] --> Conectado : conexión TCP aceptada
+
+Conectado --> Rechazado : pedido inválido
+Conectado --> Auditando : ACTION "subscribe"
+
+Auditando --> Rechazado : falla CorporateLog
+Auditando --> Suscripto : auditoría registrada /\nattach(observador) y enviar confirmación
+
+state Suscripto {
+  [*] --> Esperando
+  Esperando --> Notificando : set exitoso / notify()
+  Notificando --> Esperando : aviso enviado
+}
+
+Suscripto --> Desconectado : el cliente cerró el socket
+Suscripto --> Desconectado : falla de envío o plazo vencido
+Suscripto --> Desconectado : apagado del servidor
+
+Desconectado --> [*] : detach(observador) y cerrar socket
+Rechazado --> [*] : responder {"Error"} y cerrar
+
+note right of Suscripto
+  El socket queda abierto.
+  Pueden existir tantas suscripciones
+  simultáneas como pedidos se reciban.
+  Un suscripto caído no afecta a los demás.
+end note
+@enduml

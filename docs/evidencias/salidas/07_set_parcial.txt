@@ -1,0 +1,24 @@
+PS IS2_TPFI> type docs\evidencias\demo\set_parcial.json
+{
+  "UUID": "39908810720395",
+  "ID": "OLIVERA-TPFI-DEMO",
+  "ACTION": "set",
+  "telefono": "03442 00-0000"
+}
+(codigo de salida: 0)
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\set_parcial.json
+{
+  "telefono": "03442 00-0000",
+  "localidad": "Concepción del Uruguay",
+  "idSeq": "1146",
+  "sede": "FCyT",
+  "seqID": "23",
+  "web": "http://www.uader.edu.ar",
+  "CUIT": "30-70925411-8",
+  "cp": "3260",
+  "id": "OLIVERA-TPFI-DEMO",
+  "domicilio": "25 de Mayo 385-1P",
+  "idreq": "473",
+  "provincia": "Entre Rios"
+}
+(codigo de salida: 0)

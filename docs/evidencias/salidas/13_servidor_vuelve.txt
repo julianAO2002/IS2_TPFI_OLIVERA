@@ -1,0 +1,7 @@
+PS IS2_TPFI> python singletonproxyobserver.py -v
+Servidor TPFI 1.0.0 (build 4) escuchando en *:8080
+2026-11-02 21:15:34,901 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58294, 0, 0)
+2026-11-02 21:15:34,901 DEBUG Thread-1 (_handle_connection) tpfi.server.app: Pedido: acción=subscribe id=None sesión=164ca176-685e-47ff-bfb5-f84d82cb029a
+2026-11-02 21:15:35,104 DEBUG Thread-1 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=7718dda6-35ba-40f7-945d-ccb4f92bcb04 cliente=39908810720395 sesión=164ca176-685e-47ff-bfb5-f84d82cb029a acción=subscribe
+2026-11-02 21:15:35,105 DEBUG Thread-1 (_handle_connection) tpfi.server.observer: Suscripción registrada; total: 1
+2026-11-02 21:15:44,951 DEBUG Thread-1 (_handle_connection) tpfi.server.app: Se perdió la conexión: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto

@@ -1,6 +1,7 @@
 """Pruebas de los programas cliente contra un servidor real en un hilo."""
 
 import json
+import logging
 import socket
 import threading
 import time
@@ -51,6 +52,20 @@ def _wait_until(condition: Any, seconds: float = 8.0) -> None:
     while not condition() and time.monotonic() < deadline:
         time.sleep(0.01)
     assert condition()
+
+
+@pytest.mark.parametrize("program", [singleton_client, observer_client])
+@pytest.mark.parametrize("host", ["-s=", "-s=   ", "-s=a..b", "-s=" + "x" * 300])
+def test_host_invalido_termina_con_codigo_2(program: Any, host: str, capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        program.main(["-i=a.json", host] if program is singleton_client else [host])
+    assert exit_info.value.code == 2
+    assert "Error en los argumentos" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("host", ["localhost", "127.0.0.1", "::1", "servidor.uader.edu.ar"])
+def test_host_valido(host: str) -> None:
+    assert observer_client.parse_arguments([f"-s={host}"]).server == host
 
 
 class TestSingletonClient:
@@ -114,6 +129,12 @@ class TestSingletonClient:
             assert singleton_client.main([f"-i={path}"]) == 1
         connect.assert_not_called()
         assert "Error" in json.loads(capsys.readouterr().out)
+
+    def test_acepta_entrada_utf8_con_bom(self, tmp_path: Path) -> None:
+        # PowerShell agrega esa marca al guardar en UTF-8.
+        path = tmp_path / "in.json"
+        path.write_bytes(b"\xef\xbb\xbf" + b'{"UUID": "c", "ACTION": "list"}')
+        assert SingletonClient.load_request(path) == {"UUID": "c", "ACTION": "list"}
 
     def test_archivo_de_entrada_inexistente(self, tmp_path: Path) -> None:
         with pytest.raises(ValidationError, match="No se pudo leer"):
@@ -248,6 +269,21 @@ class TestObserverClient:
             client.stop()
             thread.join(timeout=5)
             assert not thread.is_alive()
+
+    def test_v_muestra_trazas_en_la_operacion_normal(
+        self, server: SingletonProxyObserverServer, caplog: pytest.LogCaptureFixture
+    ) -> None:
+        caplog.set_level(logging.DEBUG, logger="tpfi.clients.observer_client")
+        client = ObserverClient("localhost", server.port, retry_seconds=0.05)
+        thread = self._run(client)
+        _wait_until(lambda: server.subscriptions.count() == 1)
+        self._change(server.port, "1")
+        _wait_until(lambda: len(client.received) == 1)
+        client.stop()
+        thread.join(timeout=5)
+        assert "Enviando suscripción" in caplog.text
+        assert "Suscripción confirmada" in caplog.text
+        assert "Aviso recibido" in caplog.text
 
     def test_usa_el_identificador_de_la_cpu(self) -> None:
         with patch("uuid.getnode", return_value=123):

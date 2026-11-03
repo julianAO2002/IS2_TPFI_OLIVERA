@@ -1,0 +1,16 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:58887
+2026-11-02 21:17:30,522 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58890, 0, 0)
+2026-11-02 21:17:30,522 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58891, 0, 0)
+2026-11-02 21:17:30,523 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido: acción=subscribe id=None sesión=fe2054c3-b050-4a25-843a-0501ca1e2b88
+2026-11-02 21:17:30,523 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58892, 0, 0)
+2026-11-02 21:17:30,526 DEBUG Thread-4 (_handle_connection) tpfi.server.app: Pedido: acción=subscribe id=None sesión=6d096206-663b-4d1c-acc9-62196e311e31
+2026-11-02 21:17:30,735 DEBUG Thread-4 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=4a242fa2-78e4-4712-8348-8d3f13af6dec cliente=39908810720395 sesión=6d096206-663b-4d1c-acc9-62196e311e31 acción=subscribe
+2026-11-02 21:17:30,736 DEBUG Thread-4 (_handle_connection) tpfi.server.observer: Suscripción registrada; total: 1
+2026-11-02 21:17:30,903 DEBUG Thread-2 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=57f8d541-836c-407a-9ebb-2aaced2f6340 cliente=39908810720395 sesión=fe2054c3-b050-4a25-843a-0501ca1e2b88 acción=subscribe
+2026-11-02 21:17:30,903 DEBUG Thread-2 (_handle_connection) tpfi.server.observer: Suscripción registrada; total: 2
+2026-11-02 21:17:31,094 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58895, 0, 0)
+2026-11-02 21:17:31,111 DEBUG Thread-6 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TEST-3dec9f6780f0 sesión=3f3072e5-a621-4707-a75d-5da211d6aca1
+2026-11-02 21:17:31,278 DEBUG Thread-6 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=0515d360-9f50-42a9-8166-9c80e85b5c9a cliente=39908810720395-754d8888 sesión=3f3072e5-a621-4707-a75d-5da211d6aca1 acción=set
+2026-11-02 21:17:31,786 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::1', 58896, 0, 0)
+2026-11-02 21:17:31,786 DEBUG Thread-7 (_handle_connection) tpfi.server.app: Pedido: acción=set id=OLIVERA-TEST-3dec9f6780f0 sesión=f4cfd67e-33cc-4267-b1a3-8f172e030031
+2026-11-02 21:17:31,957 DEBUG Thread-7 (_handle_connection) tpfi.server.proxy: Auditoría registrada: clave=ae41e5f0-a792-478c-8450-45b8c8f6d2f8 cliente=39908810720395-754d8888 sesión=f4cfd67e-33cc-4267-b1a3-8f172e030031 acción=set

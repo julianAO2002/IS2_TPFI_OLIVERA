@@ -1,0 +1,43 @@
+PS IS2_TPFI> python observerclient.py -o=docs\evidencias\demo\avisos.json -r=5
+Suscripto a localhost:8080.
+{
+  "UUID": "39908810720395",
+  "ID": "OLIVERA-TPFI-DEMO",
+  "ACTION": "change",
+  "DATA": {
+    "cp": "3260",
+    "idreq": "473",
+    "provincia": "Entre Rios",
+    "sede": "FCyT",
+    "web": "http://www.uader.edu.ar",
+    "CUIT": "30-70925411-8",
+    "domicilio": "25 de Mayo 385-1P",
+    "idSeq": "1146",
+    "localidad": "Concepción del Uruguay",
+    "id": "OLIVERA-TPFI-DEMO",
+    "telefono": "03442 43-1442",
+    "seqID": "23"
+  }
+}
+{
+  "UUID": "39908810720395",
+  "ID": "OLIVERA-TPFI-DEMO",
+  "ACTION": "change",
+  "DATA": {
+    "telefono": "03442 00-0000",
+    "localidad": "Concepción del Uruguay",
+    "idSeq": "1146",
+    "sede": "FCyT",
+    "seqID": "23",
+    "web": "http://www.uader.edu.ar",
+    "CUIT": "30-70925411-8",
+    "cp": "3260",
+    "id": "OLIVERA-TPFI-DEMO",
+    "domicilio": "25 de Mayo 385-1P",
+    "idreq": "473",
+    "provincia": "Entre Rios"
+  }
+}
+Sin conexión con localhost:8080; próximo intento en 5 s.
+Sin conexión con localhost:8080; próximo intento en 5 s.
+Suscripto a localhost:8080.

@@ -160,12 +160,19 @@ class SingletonProxyObserverServer:
         """Mantiene abierta la conexión de un suscripto hasta que se corte."""
         observer = SocketObserver(connection, request.client_uuid)
         connection.settimeout(SUBSCRIBER_TIMEOUT_SECONDS)
-        proxy.subscribe(observer)
+        try:
+            proxy.subscribe(observer)
+        except TpfiError:
+            # El socket sigue abierto porque todavía hay que informarle el error al cliente.
+            observer.stop_sending()
+            raise
         try:
             observer.update(SUBSCRIBED_ACK)
             self._wait_until_closed(connection)
         finally:
+            # Quitarlo de la lista no alcanza: close también termina su hilo de envío.
             self.subscriptions.detach(observer)
+            observer.close()
 
     def _wait_until_closed(self, connection: socket.socket) -> None:
         """Bloquea hasta que el cliente cierre, para detectar desconexiones rápido."""

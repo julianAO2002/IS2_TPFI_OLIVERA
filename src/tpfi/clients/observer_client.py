@@ -17,7 +17,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from tpfi.common.cli import ArgumentParser, configure_logging, port_number, positive_seconds
+from tpfi.common.cli import ArgumentParser, configure_logging, host_name, port_number, positive_seconds
 from tpfi.common.errors import OutputError, TpfiError
 from tpfi.common.protocol import (
     DEFAULT_HOST,
@@ -82,6 +82,7 @@ class ObserverClient:
         """Se conecta, se suscribe y procesa avisos hasta que se corte la conexión."""
         request = {"UUID": self.client_uuid, "ACTION": "subscribe"}
         with socket.create_connection((self._host, self._port), timeout=CONNECT_TIMEOUT_SECONDS) as connection:
+            logger.debug("Enviando suscripción a %s:%d: %s", self._host, self._port, request)
             connection.sendall(encode_request(request, self._host))
             connection.settimeout(POLL_SECONDS)
             reader = MessageReader(connection)
@@ -97,8 +98,10 @@ class ObserverClient:
                     print(f"El servidor rechazó la suscripción: {body}", file=sys.stderr, flush=True)
                     return
                 if body == SUBSCRIBED_ACK:
+                    logger.debug("Suscripción confirmada por el servidor")
                     print(f"Suscripto a {self._host}:{self._port}.", file=sys.stderr, flush=True)
                 else:
+                    logger.debug("Aviso recibido: %s", message.start_line)
                     self.deliver(body)
 
     def deliver(self, notification: Any) -> None:
@@ -119,7 +122,9 @@ class ObserverClient:
 def parse_arguments(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Interpreta los argumentos de línea de comandos."""
     parser = ArgumentParser("Se suscribe a los cambios de CorporateData.")
-    parser.add_argument("-s", "--server", default=DEFAULT_HOST, help="host del servidor (por defecto localhost)")
+    parser.add_argument(
+        "-s", "--server", type=host_name, default=DEFAULT_HOST, help="host del servidor (por defecto localhost)"
+    )
     parser.add_argument("-p", "--port", type=port_number, default=DEFAULT_PORT, help="puerto (por defecto 8080)")
     parser.add_argument("-o", "--output", type=Path, help="archivo JSON donde acumular los avisos")
     parser.add_argument(

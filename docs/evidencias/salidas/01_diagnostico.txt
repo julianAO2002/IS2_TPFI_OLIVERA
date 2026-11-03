@@ -1,0 +1,9 @@
+PS IS2_TPFI> python --version
+Python 3.12.10
+(codigo de salida: 0)
+PS IS2_TPFI> python -c \
+  File "<string>", line 1
+    \
+     ^
+SyntaxError: unexpected EOF while parsing
+(codigo de salida: 1)

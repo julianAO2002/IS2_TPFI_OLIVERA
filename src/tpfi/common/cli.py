@@ -33,6 +33,21 @@ def port_number(text: str) -> int:
     return port
 
 
+def host_name(text: str) -> str:
+    """Valida el nombre de host antes de intentar conectarse.
+
+    Hace falta porque `socket.create_connection` lanza `UnicodeError`, no `OSError`, con
+    nombres como "a..b", y un texto vacío se conectaría en silencio a la propia máquina.
+    """
+    if not text.strip():
+        raise argparse.ArgumentTypeError("el host no puede estar vacío")
+    try:
+        text.encode("idna")
+    except UnicodeError:
+        raise argparse.ArgumentTypeError(f"'{text[:40]}' no es un nombre de host válido") from None
+    return text
+
+
 def positive_seconds(text: str) -> float:
     """Convierte un argumento a una cantidad positiva de segundos."""
     try:

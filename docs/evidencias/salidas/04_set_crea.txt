@@ -1,0 +1,16 @@
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\set.json
+{
+  "cp": "3260",
+  "idreq": "473",
+  "provincia": "Entre Rios",
+  "sede": "FCyT",
+  "web": "http://www.uader.edu.ar",
+  "CUIT": "30-70925411-8",
+  "domicilio": "25 de Mayo 385-1P",
+  "idSeq": "1146",
+  "localidad": "Concepción del Uruguay",
+  "id": "OLIVERA-TPFI-DEMO",
+  "telefono": "03442 43-1442",
+  "seqID": "23"
+}
+(codigo de salida: 0)

@@ -1,0 +1,6 @@
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\list.json -o=docs\evidencias\demo\output_list.json
+(codigo de salida: 0)
+PS IS2_TPFI> python docs\evidencias\demo\contar_list.py docs\evidencias\demo\output_list.json
+Tipo: list; registros: 54
+Registros de este trabajo: ['OLIVERA-TPFI-DEMO', 'UADER-FCyT-IS2']
+(codigo de salida: 0)

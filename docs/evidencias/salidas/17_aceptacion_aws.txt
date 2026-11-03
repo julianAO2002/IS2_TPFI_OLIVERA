@@ -1,0 +1,39 @@
+PS IS2_TPFI> python -m pytest tests/acceptance -m acceptance -v --tb=short --no-header -p no:cacheprovider
+============================= test session starts =============================
+collecting ... collected 32 items
+
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_set_crea_registro_con_blancos_y_audita PASSED [  3%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_set_conserva_los_campos_no_informados PASSED [  6%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_get_devuelve_el_registro_y_audita PASSED [  9%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_get_escribe_en_el_archivo_de_salida PASSED [ 12%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_list_devuelve_todos_los_registros_y_audita PASSED [ 15%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_subscribe_recibe_cada_cambio_y_audita PASSED [ 18%]
+tests/acceptance/test_acceptance.py::TestCaminoFeliz::test_subscribe_queda_en_la_pista_de_auditoria PASSED [ 21%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonclient.py-arguments0] PASSED [ 25%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonclient.py-arguments1] PASSED [ 28%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonclient.py-arguments2] PASSED [ 31%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonclient.py-arguments3] PASSED [ 34%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[observerclient.py-arguments4] PASSED [ 37%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[observerclient.py-arguments5] PASSED [ 40%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[observerclient.py-arguments6] PASSED [ 43%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonproxyobserver.py-arguments7] PASSED [ 46%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonproxyobserver.py-arguments8] PASSED [ 50%]
+tests/acceptance/test_acceptance.py::TestArgumentosMalformados::test_termina_con_codigo_2[singletonproxyobserver.py-arguments9] PASSED [ 53%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload0-UUID] PASSED [ 56%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload1-ACTION] PASSED [ 59%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload2-ID] PASSED [ 62%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload3-ID] PASSED [ 65%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload4-campo] PASSED [ 68%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_cliente_lo_rechaza[payload5-ID] PASSED [ 71%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_servidor_tampoco_confia_en_el_cliente[payload0-UUID] PASSED [ 75%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_servidor_tampoco_confia_en_el_cliente[payload1-ID] PASSED [ 78%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_servidor_tampoco_confia_en_el_cliente[payload2-campo] PASSED [ 81%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_el_servidor_tampoco_confia_en_el_cliente[payload3-ACTION] PASSED [ 84%]
+tests/acceptance/test_acceptance.py::TestDatosMinimos::test_registro_inexistente_devuelve_error_y_queda_auditado PASSED [ 87%]
+tests/acceptance/test_acceptance.py::TestServidorCaido::test_singletonclient_informa_el_error PASSED [ 90%]
+tests/acceptance/test_acceptance.py::TestServidorCaido::test_observerclient_reintenta_y_se_suscribe_cuando_vuelve PASSED [ 93%]
+tests/acceptance/test_acceptance.py::TestServidorCaido::test_observerclient_se_recupera_si_el_servidor_se_cae PASSED [ 96%]
+tests/acceptance/test_acceptance.py::TestServidorDuplicado::test_el_segundo_falla_y_el_primero_sigue_atendiendo PASSED [100%]
+
+======================== 32 passed in 70.00s (0:01:09) ========================
+(codigo de salida: 0)

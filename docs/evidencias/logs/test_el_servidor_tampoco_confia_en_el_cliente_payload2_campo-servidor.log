@@ -1,0 +1,4 @@
+Servidor TPFI 1.0.0 (build 4) escuchando en *:58930
+2026-11-02 21:17:48,267 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58933, 0, 0)
+2026-11-02 21:17:48,268 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58934, 0, 0)
+2026-11-02 21:17:48,268 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: La acción "set" requiere al menos un campo del tuple CorporateData.

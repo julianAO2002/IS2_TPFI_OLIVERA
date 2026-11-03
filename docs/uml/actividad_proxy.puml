@@ -1,0 +1,71 @@
+@startuml actividad_proxy
+!pragma layout smetana
+title Actividad: gestión de list / get / set en el servidor (patrón Proxy)
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+|Servidor|
+start
+:Aceptar conexión TCP;
+:Generar sesión con uuid4();
+:Leer mensaje con Content-Length;
+if (¿Mensaje válido y método POST?) then (no)
+  :Responder {"Error"} (400 / 405);
+  :Cerrar conexión;
+  stop
+else (sí)
+endif
+:Validar datos mínimos de la acción;
+if (¿Datos completos?) then (no)
+  :Responder {"Error"} (400);
+  note right: No se escribe en\nninguna tabla
+  :Cerrar conexión;
+  stop
+else (sí)
+endif
+:Crear proxy para este cliente y sesión;
+
+|Proxy|
+:Registrar en CorporateLog
+(UUID, sesión, acción, ID, timestamp);
+if (¿Se pudo auditar?) then (no)
+  |Servidor|
+  :Responder {"Error"} (502);
+  note right: Sin auditoría no\nhay operación
+  :Cerrar conexión;
+  stop
+else (sí)
+endif
+
+|Proxy|
+switch (¿Acción?)
+case (get)
+  :Servicio real: leer el tuple
+  en CorporateData;
+  if (¿Existe?) then (sí)
+    :Resultado: el tuple (200);
+  else (no)
+    :Resultado: {"Error"} (404);
+  endif
+case (list)
+  :Servicio real: recorrer CorporateData
+  siguiendo la paginación;
+  :Resultado: arreglo de tuples (200);
+case (set)
+  :Servicio real: actualizar
+  solo los campos informados;
+  if (¿La clave existía?) then (no)
+    :Servicio real: crear registro con los
+    campos no informados en blanco;
+  else (sí)
+  endif
+  :Notificar a los suscriptos
+  (patrón Observer);
+  :Resultado: el tuple final (200);
+endswitch
+
+|Servidor|
+:Responder el resultado en JSON;
+:Cerrar conexión;
+stop
+@enduml

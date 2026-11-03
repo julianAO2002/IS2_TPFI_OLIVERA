@@ -1,0 +1,17 @@
+PS IS2_TPFI> python singletonclient.py
+usage: singletonclient.py [-h] -i INPUT [-o OUTPUT] [-s SERVER] [-p PORT] [-v]
+Error en los argumentos: the following arguments are required: -i/--input
+(codigo de salida: 2)
+PS IS2_TPFI> python singletonclient.py -i=a.json -p=abc
+usage: singletonclient.py [-h] -i INPUT [-o OUTPUT] [-s SERVER] [-p PORT] [-v]
+Error en los argumentos: argument -p/--port: 'abc' no es un número de puerto
+(codigo de salida: 2)
+PS IS2_TPFI> python observerclient.py -r=0
+usage: observerclient.py [-h] [-s SERVER] [-p PORT] [-o OUTPUT] [-r RETRY]
+                         [-v]
+Error en los argumentos: argument -r/--retry: los segundos deben ser un número positivo
+(codigo de salida: 2)
+PS IS2_TPFI> python singletonproxyobserver.py -p=70000
+usage: singletonproxyobserver.py [-h] [-p PORT] [-v]
+Error en los argumentos: argument -p/--port: el puerto 70000 no está entre 1 y 65535
+(codigo de salida: 2)

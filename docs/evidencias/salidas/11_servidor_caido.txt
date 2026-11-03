@@ -1,0 +1,5 @@
+PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\list.json
+{
+  "Error": "No se pudo conectar con el servidor localhost:8080."
+}
+(codigo de salida: 1)

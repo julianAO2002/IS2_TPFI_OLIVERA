@@ -93,13 +93,17 @@ class SocketObserver(Observer):
         except OSError:
             logger.debug("El socket del cliente %s ya estaba cerrado", self.client_uuid)
 
-    def close(self) -> None:
-        """Termina el hilo de envío y cierra el socket."""
+    def stop_sending(self) -> None:
+        """Termina el hilo de envío, dejando el socket abierto."""
         try:
             self._pending.put_nowait(None)
         except queue.Full:
             # Con la cola llena el hilo no está esperando: el corte del socket lo detiene.
             logger.debug("Cola llena al cerrar el observador de %s", self.client_uuid)
+
+    def close(self) -> None:
+        """Termina el hilo de envío y cierra el socket."""
+        self.stop_sending()
         self._shutdown()
         self._connection.close()
 
