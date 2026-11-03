@@ -35,5 +35,5 @@ tests/acceptance/test_acceptance.py::TestServidorCaido::test_observerclient_rein
 tests/acceptance/test_acceptance.py::TestServidorCaido::test_observerclient_se_recupera_si_el_servidor_se_cae PASSED [ 96%]
 tests/acceptance/test_acceptance.py::TestServidorDuplicado::test_el_segundo_falla_y_el_primero_sigue_atendiendo PASSED [100%]
 
-======================== 32 passed in 68.52s (0:01:08) ========================
+======================== 32 passed in 70.00s (0:01:09) ========================
 (codigo de salida: 0)

@@ -1,4 +1,4 @@
-Servidor TPFI 1.0.0 (build 4) escuchando en *:59549
-2026-11-02 20:40:53,492 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59552, 0, 0)
-2026-11-02 20:40:53,492 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 59553, 0, 0)
-2026-11-02 20:40:53,493 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: Falta el dato obligatorio ID o no es un texto válido.
+Servidor TPFI 1.0.0 (build 4) escuchando en *:58922
+2026-11-02 21:17:45,309 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58925, 0, 0)
+2026-11-02 21:17:45,309 DEBUG MainThread tpfi.server.app: Conexión aceptada desde ('::ffff:127.0.0.1', 58926, 0, 0)
+2026-11-02 21:17:45,310 DEBUG Thread-2 (_handle_connection) tpfi.server.app: Pedido rechazado: Falta el dato obligatorio ID o no es un texto válido.

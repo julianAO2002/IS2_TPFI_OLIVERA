@@ -18,6 +18,11 @@ PR integrado.
 
 ### Corregido
 
+- Cada suscriptor desconectado dejaba un hilo vivo. Lo detectó la verificación independiente.
+- `-s` no se validaba: un host inválido terminaba con un traceback, y uno vacío se conectaba a la propia
+  máquina.
+- `observerclient.py -v` no mostraba trazas durante la operación normal.
+- Los archivos de entrada UTF-8 con BOM se rechazaban.
 - `MessageReader` podía perder un mensaje parcial si `recv` vencía su plazo. Ahora los bytes se
   consumen recién con el mensaje completo. Lo detectó una prueba unitaria.
 - Un suscripto trabado demoraba hasta 5 segundos por cliente la respuesta de un `set`, aunque el

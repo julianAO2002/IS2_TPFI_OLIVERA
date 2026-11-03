@@ -62,7 +62,9 @@ def table(headers: list[str], rows: list[list[str]], widths: list[int] | None = 
 coverage_text = read("16_cobertura")
 total_tests = re.search(r"(\d+) passed", coverage_text).group(1)
 total_coverage = re.search(r"Total coverage: ([\d.]+)%", coverage_text).group(1)
-acceptance_tests = re.search(r"(\d+) passed", read("17_aceptacion_aws")).group(1)
+acceptance_text = read("17_aceptacion_aws")
+acceptance_tests = re.search(r"(\d+) passed", acceptance_text).group(1)
+acceptance_seconds = round(float(re.search(r"passed in ([\d.]+)s", acceptance_text).group(1)))
 unit_tests = int(total_tests) - int(acceptance_tests)
 coverage_lines = [line for line in coverage_text.splitlines() if line.startswith(("Name", "src", "TOTAL", "---"))]
 
@@ -142,10 +144,11 @@ alojados en AWS DynamoDB. Un servidor concentra el acceso a las tablas, deja una
 de cada acción y avisa los cambios a los clientes suscriptos.</p>
 {table(["Indicador", "Resultado"], [
     ["Pruebas automatizadas", f"{total_tests} aprobadas de {total_tests}: {unit_tests} unitarias y {acceptance_tests} de aceptación"],
-    ["Aceptación contra AWS real", f"{acceptance_tests} de {acceptance_tests} aprobadas, en 68 segundos"],
+    ["Aceptación contra AWS real", f"{acceptance_tests} de {acceptance_tests} aprobadas, en {acceptance_seconds} segundos"],
     ["Cobertura de código", f"{total_coverage}% (mínimo exigido: 85%)"],
     ["ruff, black, PEP8, PEP257, mypy, pyright, bandit", "Sin errores ni observaciones"],
     ["TruffleHog sobre el historial", "0 secretos"],
+    ["Verificación independiente", "3 bloqueantes encontrados, corregidos y recomprobados"],
     ["Workflow de CI", "5 de 5 controles aprobados en cada PR, en Ubuntu y Windows"],
 ], [45, 55])}
 <h2>Cumplimiento de la consigna</h2>
@@ -233,6 +236,7 @@ el código.</li>
 <li><b>Publicación.</b> Repositorio en GitHub, con búsqueda de secretos previa al primer push.</li>
 <li><b>Integración.</b> PR 1, PR 6 y PR 7 integrados con todos los controles aprobados.</li>
 <li><b>Evidencias.</b> Corridas reales y capturas sobre el código final.</li>
+<li><b>Verificación independiente.</b> Comprobación de cada requisito en una copia limpia, y corrección de lo encontrado.</li>
 <li><b>Memoria.</b> Este documento, generado a partir de las salidas guardadas.</li>
 </ol>
 <h2>Commits principales</h2>
@@ -246,6 +250,7 @@ el código.</li>
     ["cca859d", "Registro de build 2, cambios y prueba de versión"],
     ["bb852c9", "Documentación de todos los módulos y verificación de las páginas generadas"],
     ["c90219f", "Exportación del paquete y pruebas de la generación de documentación"],
+    ["e31d668", "Liberación de hilos de suscriptores, validación del host y trazas del observador"],
 ], [18, 82])}
 
 <h1>6. Validación y verificación</h1>
@@ -342,23 +347,34 @@ técnica de verificación.</p>
     ["Un suscripto trabado demoraba la respuesta del set hasta 5 segundos por cliente. Con varios, el cliente podía recibir un timeout aunque el dato ya estuviera guardado.", "Revisión de resiliencia (severidad crítica)", "Cada <code>SocketObserver</code> tiene una cola acotada y un hilo de envío. Se agregaron 5 pruebas."],
     ["La primera corrida real falló en 8 de 32 casos con <code>ProvisionedThroughputExceededException</code>. El arnés de pruebas hacía un <code>Scan</code> de CorporateLog por prueba.", "Corrida contra AWS real (moto no limita la capacidad)", "Cada fila se lee por clave con <code>GetItem</code>. El sistema no tenía el defecto; lo tenía el arnés."],
     ["La documentación publicada no incluía los módulos: <code>__all__</code> limitaba a pdoc y el CI solo comprobaba que pdoc terminara bien.", "Revisión de las capturas de esta memoria (la página del módulo proxy daba 404)", "<code>__all__</code> incluye los subpaquetes, y <code>build_docs.py</code> falla si falta una página. Se agregaron 4 pruebas."],
+    ["Cada suscriptor que se desconectaba dejaba un hilo vivo para siempre. Lo introdujo la corrección de la cola.", "Verificador independiente (40 ciclos: de 9 a 49 hilos)", "Al terminar la conexión se cierra el observador. Si la auditoría falla, se detiene el hilo sin cerrar el socket, que aún debe informar el error."],
+    ["<code>-s</code> sin validar: <code>-s=a..b</code> terminaba con un traceback y <code>-s=</code> se conectaba a la propia máquina.", "Verificador independiente", "Validación en la línea de comandos: código de salida 2 y mensaje claro. <code>UnicodeError</code> no es <code>OSError</code>, por eso se escapaba."],
+    ["<code>observerclient.py -v</code> no mostraba nada durante la operación normal.", "Verificador independiente", "Trazas de debug al suscribirse, al confirmarse y al recibir cada aviso."],
+    ["Los archivos de entrada UTF-8 con BOM, que genera PowerShell, se rechazaban con un mensaje engañoso.", "Verificador independiente (observación)", "El cliente descarta la marca BOM."],
     ["El esqueleto incluía <code>dependabot.yml</code>, que abrió 4 PRs sobre workflows ya descartados.", "Revisión del estado de GitHub", "Se cerraron con explicación; el archivo ya se había quitado en el PR 1."],
 ], [46, 24, 30])}
 <div class="note">Impacto del tercer defecto: durante unos 5 minutos, el arnés consumió capacidad de
 lectura de una tabla compartida con otros alumnos, lo que pudo demorar sus lecturas. La corrida
-corregida tomó 68 segundos, contra 289 de la original.</div>
+corregida tomó {acceptance_seconds} segundos, contra 289 de la original.</div>
 <h2>Revisión independiente</h2>
 <p>El código se revisó con Gentle AI por tramos, porque el cambio completo superaba el tamaño admitido.
 El tramo del servidor pasó por las lentes de riesgo, resiliencia y fiabilidad, con una corrección. El
 tramo de protocolo y persistencia pasó por las lentes de riesgo y fiabilidad, sin correcciones. El arreglo de la documentación pasó por la lente de fiabilidad.</p>
+<h2>Verificación independiente</h2>
+<p>Un agente sin acceso al contexto del desarrollo comprobó cada requisito en una copia limpia del
+repositorio, contra moto y con sus propias pruebas de caja negra. Encontró 3 defectos bloqueantes que no
+habían detectado ni las pruebas automatizadas ni la revisión. Se corrigieron juntos, con pruebas que
+primero fallaron, y una recomprobación limitada a esos defectos confirmó la corrección: el servidor
+mantuvo 8 hilos a lo largo de 80 ciclos de suscripción. También confirmó que un hash de ambas tablas no
+cambia tras 44 pedidos rechazados.</p>
 <h2>Registro de versiones</h2>
 {table(["Build", "Contenido"], [
     ["1", "Esqueleto, herramientas, CI/CD, protocolo y persistencia Singleton"],
     ["2", "Servidor, Proxy, Observer, clientes y aceptación"],
     ["3", "Documentación pdoc con todos los módulos"],
-    ["4", "UML, evidencias, memoria, README completo y pruebas de la generación de documentación"],
+    ["4", "UML, evidencias, memoria, README completo y corrección de los defectos de la verificación independiente"],
 ], [12, 88])}
-<p>La demostración de las secciones 6.3 a 6.6 se hizo sobre el build 2, por eso esa versión aparece en las capturas. Los builds 3 y 4 no cambian el comportamiento de los programas. Los controles de calidad, la cobertura, la aceptación contra AWS y TruffleHog se repitieron sobre el build 4.</p>
+<p>Todas las corridas y capturas de terminal de esta memoria se hicieron sobre el build 4.</p>
 
 <h1>10. Limitaciones conocidas</h1>
 <p>La revisión dejó observaciones que no bloquean la entrega. No se resolvieron porque el enunciado no
@@ -369,7 +385,8 @@ las pide, pero un sistema productivo tendría que atenderlas.</p>
     ["La comunicación no está cifrada", "Los datos viajan legibles por la red", "Usar TLS"],
     ["Un hilo por conexión, sin tope", "Muchas conexiones pueden agotar recursos", "Usar un conjunto de hilos con límite"],
     ["El apagado no espera a los hilos en curso", "Una respuesta puede quedar cortada al cerrar", "Apagado ordenado con espera"],
-    ["La cancelación manual se probó simulando la excepción", "Ctrl+C no se ejercitó en una prueba automatizada", "Prueba con señal real por proceso"],
+    ["La cancelación manual no tiene prueba automatizada con señal real", "Se simula la excepción; el verificador comprobó a mano que Ctrl+C termina con código 0", "Prueba con señal real por proceso"],
+    ["Un <code>set</code> de una clave nueva sin campos se rechaza", "Es una interpretación de los datos mínimos: el enunciado podría leerse como crear una fila en blanco", "Confirmar el criterio con la cátedra"],
 ], [36, 34, 30])}
 <p>Además, las evidencias públicas incluyen el identificador de CPU, derivado de la dirección MAC, porque
 el enunciado exige registrarlo.</p>
@@ -378,15 +395,18 @@ el enunciado exige registrarlo.</p>
 <p>El enunciado permite usar herramientas de IA si se documentan los prompts. Se usó Claude Code con el
 modelo Claude Opus 5.5. La herramienta leyó el enunciado, propuso el diseño, escribió el código, las
 pruebas, los diagramas, los workflows y esta memoria, y ejecutó las verificaciones. Gentle AI aportó la
-revisión independiente. Los prompts están registrados textualmente en <code>CONTEXT.md</code>.</p>
+revisión por lentes, y un agente separado hizo la verificación independiente. Los prompts están registrados textualmente en <code>CONTEXT.md</code>.</p>
 
 <h1 class="flow">12. Conclusiones</h1>
 <ul>
 <li>Los tres patrones separan bien las responsabilidades: agregar auditoría o notificaciones no
 requirió tocar el acceso a datos.</li>
 <li>Cada técnica encontró defectos distintos. La prueba unitaria detectó el error de lectura, el
-entorno real detectó el límite de capacidad y la revisión detectó el bloqueo por suscriptores trabados.
-Ninguna de ellas por sí sola los habría encontrado todos.</li>
+entorno real detectó el límite de capacidad, la revisión detectó el bloqueo por suscriptores trabados y
+la verificación independiente detectó la fuga de hilos. Ninguna de ellas por sí sola los habría
+encontrado todos.</li>
+<li>Una corrección también puede introducir defectos: la fuga de hilos vino de la corrección del
+bloqueo, y solo se vio al probar el comportamiento desde afuera.</li>
 <li>Un entorno simulado es útil pero no alcanza: las pruebas pasaban 32 de 32 contra moto y 24 de 32
 contra AWS en la primera corrida.</li>
 <li>La automatización de los controles permitió repetirlos en cada cambio, con el mismo criterio en la

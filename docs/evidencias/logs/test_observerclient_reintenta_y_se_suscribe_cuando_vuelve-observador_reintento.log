@@ -1,21 +1,21 @@
-Sin conexión con localhost:59583; próximo intento en 1 s.
-Suscripto a localhost:59583.
+Sin conexión con localhost:58956; próximo intento en 1 s.
+Suscripto a localhost:58956.
 {
-  "UUID": "39908810720395-19d8bfbc",
-  "ID": "OLIVERA-TEST-010a833fcbb1",
+  "UUID": "39908810720395-e29f6446",
+  "ID": "OLIVERA-TEST-4d52c65c9dd5",
   "ACTION": "change",
   "DATA": {
-    "id": "OLIVERA-TEST-010a833fcbb1",
-    "telefono": "",
+    "domicilio": "",
+    "idSeq": "",
+    "id": "OLIVERA-TEST-4d52c65c9dd5",
     "CUIT": "",
     "seqID": "",
-    "domicilio": "",
-    "sede": "x",
-    "cp": "",
-    "provincia": "",
     "localidad": "",
-    "web": "",
-    "idSeq": "",
-    "idreq": ""
+    "sede": "x",
+    "telefono": "",
+    "provincia": "",
+    "cp": "",
+    "idreq": "",
+    "web": ""
   }
 }

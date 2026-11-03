@@ -1,7 +1,7 @@
 PS IS2_TPFI> python -m pytest --cov --cov-report=term --cov-fail-under=85 -q
-........................................................................ [ 36%]
-........................................................................ [ 73%]
-.....................................................                    [100%]
+........................................................................ [ 33%]
+........................................................................ [ 67%]
+.....................................................................    [100%]
 =============================== tests coverage ================================
 ______________ coverage: platform win32, python 3.12.10-final-0 _______________
 
@@ -9,10 +9,10 @@ Name                                     Stmts   Miss Branch BrPart  Cover   Mis
 ------------------------------------------------------------------------------------
 src\tpfi\__init__.py                         3      0      0      0   100%
 src\tpfi\clients\__init__.py                 0      0      0      0   100%
-src\tpfi\clients\observer_client.py         84      0     14      0   100%
-src\tpfi\clients\singleton_client.py        65      0      4      0   100%
+src\tpfi\clients\observer_client.py         87      0     14      0   100%
+src\tpfi\clients\singleton_client.py        66      0      4      0   100%
 src\tpfi\common\__init__.py                  0      0      0      0   100%
-src\tpfi\common\cli.py                      35      0     10      1    98%   55->54
+src\tpfi\common\cli.py                      43      0     12      1    98%   70->69
 src\tpfi\common\errors.py                   14      0      0      0   100%
 src\tpfi\common\protocol.py                128      1     44      1    99%   235
 src\tpfi\common\version.py                   9      2      0      0    78%   17-19
@@ -22,12 +22,12 @@ src\tpfi\persistence\corporate_log.py       31      0      2      0   100%
 src\tpfi\persistence\dynamodb.py            23      3      0      0    87%   31-34
 src\tpfi\persistence\singleton.py           14      0      2      0   100%
 src\tpfi\server\__init__.py                  0      0      0      0   100%
-src\tpfi\server\app.py                     142      7     26      8    91%   60, 80, 81->exit, 90, 97->99, 154, 172->exit, 174->172, 177, 184-185
-src\tpfi\server\observer.py                 72      0      8      0   100%
+src\tpfi\server\app.py                     147      7     26      8    91%   60, 80, 81->exit, 90, 97->99, 154, 179->exit, 181->179, 184, 191-192
+src\tpfi\server\observer.py                 74      0      8      0   100%
 src\tpfi\server\proxy.py                    31      0      0      0   100%
 src\tpfi\server\service.py                  17      0      2      0   100%
 ------------------------------------------------------------------------------------
-TOTAL                                      727     15    118     12    97%
-Required test coverage of 85% reached. Total coverage: 96.80%
-197 passed in 62.78s (0:01:02)
+TOTAL                                      746     15    120     12    97%
+Required test coverage of 85% reached. Total coverage: 96.88%
+213 passed in 65.11s (0:01:05)
 (codigo de salida: 0)

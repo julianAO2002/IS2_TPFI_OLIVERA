@@ -13,9 +13,9 @@ PS IS2_TPFI> aws dynamodb get-item --table-name CorporateLog --key file://docs/e
 +---------------+----------------------------------------+
 |  CPUid        |  39908810720395                        |
 |  accion       |  set                                   |
-|  fecha        |  2026-11-02 20:04:28                   |
-|  id           |  ff07285b-56d4-4c1b-aaa4-89b421b63ca7  |
+|  fecha        |  2026-11-02 21:14:56                   |
+|  id           |  84dc6d6a-9894-4740-ae54-952dc0c1ac83  |
 |  idSolicitado |  OLIVERA-TPFI-DEMO                     |
-|  sesion       |  27bc8a9c-54bc-4a3d-87e2-66752480babf  |
+|  sesion       |  62d62355-3018-4245-bd8d-eb3b3cf44b9b  |
 +---------------+----------------------------------------+
 (codigo de salida: 0)

@@ -5,7 +5,8 @@ El enunciado pide documentar aquí los prompts utilizados. Este archivo los regi
 ## Herramientas
 
 - Claude Code, con el modelo Claude Opus 5.5, como asistente de desarrollo.
-- Gentle AI, para la revisión independiente del código por lentes de riesgo, resiliencia y fiabilidad.
+- Gentle AI, para la revisión del código por lentes de riesgo, resiliencia y fiabilidad.
+- Un agente de Claude Code separado, sin el contexto del desarrollo, para la verificación independiente.
 
 ## Prompts del alumno
 
@@ -15,12 +16,13 @@ El enunciado pide documentar aquí los prompts utilizados. Este archivo los regi
 
 ## Decisiones del alumno durante el trabajo
 
-La herramienta pidió autorización para revisar cada tramo de código. El alumno eligió "Review this change" en las cuatro consultas:
+La herramienta pidió autorización para revisar cada tramo de código. El alumno eligió "Review this change" en las cinco consultas:
 
 1. Cambio completo (no se pudo revisar: superaba el tamaño admitido y se partió en tramos).
 2. Servidor, clientes y pruebas.
 3. Protocolo y persistencia Singleton.
 4. Corrección de la documentación.
+5. UML, evidencias, memoria y pruebas de la generación de documentación.
 
 ## Qué hizo la herramienta
 

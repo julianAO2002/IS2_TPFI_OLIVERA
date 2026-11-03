@@ -59,4 +59,5 @@ Ruta: inline porque ningun disparador de escritor aplica (las unidades dependen 
 - L5 (2026-11-02): primera corrida real 24 de 32; el harness agotó la capacidad de CorporateLog con Scan. Corregido con GetItem por clave.
 - L6 (2026-11-02): revisión nativa: tramo servidor con una corrección crítica (cola por suscriptor), tramo persistencia aprobado, arreglo de documentación aprobado. Observaciones consultivas en la sección 10 de la memoria.
 - L7 (2026-11-02): la revisión de las capturas encontró la página proxy en 404: `__all__` limitaba a pdoc. PR 7 y commit c90219f.
-- L8 (2026-11-02): resultado final sobre build 4: 197 pruebas, 96.80% de cobertura, 32 de 32 en AWS, 0 secretos.
+- L8 (2026-11-02): verificador independiente: 3 bloqueantes (fuga de hilos, -s sin validar, -v del observador sin trazas). Corregidos en e31d668; recomprobación: los 3 FIXED.
+- L9 (2026-11-02): resultado final sobre build 4: 213 pruebas, 96.88% de cobertura, 32 de 32 en AWS, 0 secretos.

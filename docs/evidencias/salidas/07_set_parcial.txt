@@ -8,17 +8,17 @@ PS IS2_TPFI> type docs\evidencias\demo\set_parcial.json
 (codigo de salida: 0)
 PS IS2_TPFI> python singletonclient.py -i=docs\evidencias\demo\set_parcial.json
 {
-  "seqID": "23",
   "telefono": "03442 00-0000",
-  "sede": "FCyT",
-  "provincia": "Entre Rios",
-  "web": "http://www.uader.edu.ar",
-  "idreq": "473",
   "localidad": "Concepción del Uruguay",
-  "id": "OLIVERA-TPFI-DEMO",
-  "CUIT": "30-70925411-8",
   "idSeq": "1146",
+  "sede": "FCyT",
+  "seqID": "23",
+  "web": "http://www.uader.edu.ar",
+  "CUIT": "30-70925411-8",
   "cp": "3260",
-  "domicilio": "25 de Mayo 385-1P"
+  "id": "OLIVERA-TPFI-DEMO",
+  "domicilio": "25 de Mayo 385-1P",
+  "idreq": "473",
+  "provincia": "Entre Rios"
 }
 (codigo de salida: 0)
